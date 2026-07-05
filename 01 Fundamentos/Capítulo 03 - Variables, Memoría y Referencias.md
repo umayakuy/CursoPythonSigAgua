@@ -58,20 +58,6 @@ MÓDULO I — FUNDAMENTOS
 
 ---
 
-# Historial de cambios
-
-## Versión 2.0
-
-### Cambios
-
-- Reestructuración completa del capítulo.
-- Explicación detallada del modelo de memoria de Python.
-- Diagramas conceptuales.
-- Introducción a referencias y mutabilidad.
-- Integración con el proyecto AQUA-SIG.
-
----
-
 # Bitácora del Ingeniero
 
 Hasta este momento hemos aprendido dos ideas fundamentales.

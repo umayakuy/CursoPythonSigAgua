@@ -14,10 +14,6 @@ license: "CC BY-SA 4.0"
 last_update: "2026-07-04"
 ---
 
-# Python Moderno para Desarrolladores SIG
-
-## Módulo I — Fundamentos
-
 # Capítulo 3
 
 # Variables, Memoria y Referencias
@@ -393,20 +389,6 @@ Simplemente cambia la referencia del nombre.
 
 ---
 
-# Resumen de la Parte 1
-
-En esta primera parte hemos aprendido que:
-
-- Una variable es un nombre.
-- Un nombre hace referencia a un objeto.
-- Todo objeto posee identidad, tipo y valor.
-- La asignación crea asociaciones entre nombres y objetos.
-- Reasignar un nombre no implica modificar el objeto existente.
-
-En la siguiente parte profundizaremos en uno de los conceptos más importantes del lenguaje: **la mutabilidad**, el funcionamiento de las listas y diccionarios, y cómo CPython administra las referencias en memoria.
-
----
-
 # Objetos mutables e inmutables
 
 Una de las características más importantes del modelo de objetos de Python es que **no todos los objetos pueden modificarse** después de haber sido creados.
@@ -776,21 +758,6 @@ Elegir correctamente entre compartir referencias o crear copias es una decisión
 
 ---
 
-# Resumen de la Parte 2
-
-En esta parte aprendimos que:
-
-- Existen objetos mutables e inmutables.
-- Los objetos inmutables nunca cambian.
-- Los objetos mutables pueden modificar su contenido.
-- Dos variables pueden compartir una misma referencia.
-- `copy()` crea una nueva colección independiente.
-- Compartir referencias y crear copias son decisiones de diseño diferentes.
-
-En la siguiente parte estudiaremos cómo **CPython administra la memoria**, el conteo de referencias (*Reference Counting*) y el funcionamiento del recolector de basura (*Garbage Collector*), conceptos esenciales para comprender el ciclo de vida de los objetos.
-
----
-
 # Internamente (CPython)
 
 Hasta ahora hemos estudiado el comportamiento visible de los objetos. Sin embargo, una de las fortalezas de Python es que gran parte de la administración de memoria ocurre automáticamente.
@@ -1093,20 +1060,6 @@ Pregúntate también:
 - ¿Necesito compartirlo o crear una copia?
 
 En muchas ocasiones, responder estas preguntas permite localizar el problema mucho más rápido que revisar cientos de líneas de código.
-
----
-
-# Resumen de la Parte 3
-
-En esta parte aprendimos que:
-
-- Todo objeto tiene un ciclo de vida.
-- CPython utiliza conteo de referencias para administrar la memoria.
-- El recolector de basura elimina objetos inaccesibles.
-- `None` es un objeto especial que representa la ausencia de valor.
-- Comprender la memoria facilita el desarrollo de aplicaciones SIG robustas y eficientes.
-
-En la **Parte 4** concluiremos el capítulo con laboratorios prácticos, ejercicios de análisis, errores frecuentes, un resumen general y la conexión con el siguiente capítulo.
 
 ---
 

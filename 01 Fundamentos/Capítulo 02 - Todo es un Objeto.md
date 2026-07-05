@@ -14,10 +14,6 @@ license: "CC BY-SA 4.0"
 last_update: "2026-07-04"
 ---
 
-# Python Moderno para Desarrolladores SIG
-
-## Módulo I — Fundamentos
-
 # Capítulo 2
 
 # Todo es un Objeto
@@ -60,19 +56,6 @@ MÓDULO I — FUNDAMENTOS
 | Ejercicios | 10 |
 | Proyecto AQUA-SIG | Primer modelo de objetos |
 
----
-
-# Historial de cambios
-
-## Versión 2.0
-
-### Cambios
-
-- Reescritura completa del capítulo.
-- Explicación orientada a desarrolladores provenientes de BASIC, C y Pascal.
-- Nuevos diagramas conceptuales.
-- Introducción al modelo de objetos.
-- Integración con el Proyecto AQUA-SIG.
 
 ---
 

@@ -1,116 +1,216 @@
 ---
-title: "Capítulo 2 - El Universo de los Objetos"
+title: "Capítulo 2 - Todo es un Objeto"
 book: "Python Moderno para Desarrolladores SIG"
+subtitle: "Fundamentos, Arquitectura y Desarrollo Profesional con QGIS, PostGIS, PyQt e Inteligencia Artificial"
+edition: "Primera Edición"
+version: "2.0"
+module: "Módulo I - Fundamentos"
 chapter: 2
-version: 1.0
-status: En desarrollo
-author:
+status: "En desarrollo"
+authors:
   - Jorge Ayala Niño de Guzmán
   - ChatGPT (OpenAI)
-last_update: 2026-07-04
-level: Fundamentos
-estimated_time: "5 horas"
-prerequisites:
-  - Capítulo 1 - La Filosofía de Python
+license: "CC BY-SA 4.0"
+last_update: "2026-07-04"
 ---
+
+# Python Moderno para Desarrolladores SIG
+
+## Módulo I — Fundamentos
 
 # Capítulo 2
-# El Universo de los Objetos
 
-> **"Todo en Python es un objeto."**
-
-Esta es probablemente la frase más repetida cuando se habla de Python. Sin embargo, también es una de las menos comprendidas.
-
-En este capítulo construiremos una comprensión sólida de este concepto, ya que será la base para entender todo el lenguaje, desde un número entero hasta una capa de QGIS (`QgsVectorLayer`).
+# Todo es un Objeto
 
 ---
 
-# Objetivos
+# Ruta del Conocimiento
 
-Al finalizar este capítulo serás capaz de:
+```text
+                     PYTHON MODERNO PARA DESARROLLADORES SIG
 
-- Comprender qué es un objeto.
-- Diferenciar una clase de una instancia.
-- Comprender qué es una referencia.
-- Identificar la identidad de un objeto.
-- Explorar cualquier objeto mediante introspección.
-- Comprender por qué Python se considera un lenguaje orientado a objetos.
+MÓDULO I — FUNDAMENTOS
 
----
+✅ Capítulo 1  La Filosofía de Python
 
-# Conocimientos previos
+✅ Capítulo 2  Todo es un Objeto     ← Usted está aquí
 
-Se recomienda haber estudiado:
+⬜ Capítulo 3  Variables, Memoria y Referencias
 
-- Capítulo 1 – La Filosofía de Python
+⬜ Capítulo 4  Tipos de Datos
 
-No se requieren conocimientos previos de programación orientada a objetos.
+⬜ Capítulo 5  Colecciones
 
----
+⬜ Capítulo 6  Funciones
 
-# 2.1 ¿Qué es un objeto?
+⬜ Capítulo 7  Clases y Objetos
 
-Antes de escribir una sola línea de código debemos responder una pregunta fundamental.
-
-> **¿Qué es un objeto?**
-
-Una definición frecuente es:
-
-> "Un objeto es una instancia de una clase."
-
-Aunque técnicamente es correcta, resulta poco útil para quien está comenzando.
-
-Veamos una analogía.
-
-## Ejemplo: una estación meteorológica
-
-Supongamos que una empresa fabrica estaciones meteorológicas.
-
-Existe un plano de fabricación.
-
-Ese plano especifica:
-
-- sensores
-- pantalla
-- memoria
-- batería
-- comunicaciones
-
-Ese plano **no mide temperatura**.
-
-Simplemente describe cómo construir una estación.
-
-Ese plano representa una **clase**.
-
-Cuando fabricamos una estación física obtenemos un objeto real.
-
-Cada estación tendrá:
-
-- número de serie
-- temperatura
-- humedad
-- presión
-
-Cada una será diferente de las demás.
-
-Cada estación será una **instancia** de esa clase.
-
----
-
-# 2.2 En Python ocurre exactamente lo mismo
-
-Cuando escribimos:
-
-```python
-x = 10
+⬜ Capítulo 8  Módulos y Paquetes
 ```
 
-Python crea un objeto de tipo entero.
+---
 
-Podemos comprobarlo.
+# Tiempo estimado
+
+| Concepto | Valor |
+|----------|-------|
+| Duración | 5 horas |
+| Dificultad | ⭐⭐☆☆☆ |
+| Laboratorios | 4 |
+| Ejercicios | 10 |
+| Proyecto AQUA-SIG | Primer modelo de objetos |
+
+---
+
+# Historial de cambios
+
+## Versión 2.0
+
+### Cambios
+
+- Reescritura completa del capítulo.
+- Explicación orientada a desarrolladores provenientes de BASIC, C y Pascal.
+- Nuevos diagramas conceptuales.
+- Introducción al modelo de objetos.
+- Integración con el Proyecto AQUA-SIG.
+
+---
+
+# Bitácora del Ingeniero
+
+Durante muchos años programé pensando que una variable era una caja donde se guardaban datos.
+
+Python me obligó a abandonar esa idea.
+
+Aquí descubriremos que una variable no contiene un objeto; únicamente conoce dónde encontrarlo.
+
+Comprender este concepto evitará muchos errores cuando trabajemos con listas, diccionarios, clases y objetos de QGIS.
+
+---
+
+# 🎯 ¿Por qué aprender esto?
+
+Porque toda la API de Python está construida sobre objetos.
+
+QGIS está formado por objetos.
+
+PyQt está formado por objetos.
+
+PostGIS devuelve objetos.
+
+GeoPandas trabaja con objetos.
+
+Si comprendes este capítulo, comprenderás el resto del libro.
+
+---
+
+# ¿Qué significa "Todo es un objeto"?
+
+En Python prácticamente todo es un objeto.
+
+Por ejemplo:
 
 ```python
-x = 10
+10
+```
+
+es un objeto.
+
+```python
+3.1416
+```
+
+también es un objeto.
+
+Una cadena de texto:
+
+```python
+"Hola"
+```
+
+es un objeto.
+
+Una lista:
+
+```python
+[1,2,3]
+```
+
+también es un objeto.
+
+Incluso una función.
+
+```python
+print
+```
+
+es un objeto.
+
+Y una clase también.
+
+---
+
+# Primer experimento
+
+Escribamos:
+
+```python
+x = 25
+```
+
+¿Qué ocurrió?
+
+Muchos pensarán:
+
+> Se guardó el número 25 dentro de x.
+
+En realidad ocurrió algo diferente.
+
+```
+Nombre
+
+x
+│
+│
+▼
+
+Objeto entero
+
++------+
+|  25  |
++------+
+```
+
+`x` no contiene el número.
+
+`x` apunta al objeto.
+
+---
+
+# Comprobándolo
+
+Python posee una función llamada `id()`.
+
+```python
+x = 25
+
+print(id(x))
+```
+
+Resultado aproximado:
+
+```
+140218513668400
+```
+
+Ese número identifica al objeto en memoria durante la ejecución del programa.
+
+---
+
+# Todo tiene un tipo
+
+```python
+x = 25
 
 print(type(x))
 ```
@@ -121,327 +221,269 @@ Resultado:
 <class 'int'>
 ```
 
-El objeto pertenece a la clase `int`.
+El objeto sabe de qué tipo es.
 
 ---
 
-# 2.3 Todo objeto posee tres propiedades fundamentales
+# Un objeto tiene tres características
 
-Todo objeto en Python posee:
+Todo objeto posee:
 
-1. Identidad
-2. Tipo
-3. Valor
+- una identidad;
+- un tipo;
+- un valor.
 
-## Identidad
+Podemos representarlo así:
 
-Cada objeto posee una identidad única.
+```
+Objeto
 
-Podemos consultarla mediante:
-
-```python
-id(x)
++-----------------------+
+| Tipo      int         |
+| Valor      25         |
+| ID      140218...     |
++-----------------------+
 ```
 
-El valor obtenido representa la identidad del objeto durante su existencia.
+---
+
+# 🔬 Internamente (CPython)
+
+CPython representa todos los objetos mediante una estructura interna denominada `PyObject`.
+
+De forma simplificada:
+
+```text
+PyObject
+
++----------------------+
+| Reference Count      |
+| Pointer al Tipo      |
++----------------------+
+```
+
+A partir de esta estructura básica se construyen enteros, cadenas, listas, diccionarios y cualquier otro objeto del lenguaje.
+
+Comprender este diseño nos ayudará más adelante a entender el manejo de memoria y el recolector de basura.
 
 ---
 
-## Tipo
+# Métodos
 
-El tipo indica la clase a la que pertenece el objeto.
+Como los objetos conocen su tipo, también conocen las operaciones que pueden realizar.
+
+Por ejemplo:
 
 ```python
-type(x)
+texto = "python"
+
+texto.upper()
 ```
 
 Resultado:
 
 ```text
-<class 'int'>
+PYTHON
 ```
+
+No estamos llamando a una función cualquiera.
+
+Estamos pidiendo al objeto `texto` que ejecute uno de sus métodos.
 
 ---
 
-## Valor
+# 🌎 Aplicación SIG
 
-En este caso:
-
-```text
-10
-```
-
-Podemos representar gráficamente un objeto como:
-
-```text
-┌─────────────────────────────┐
-│ Tipo : int                  │
-│ Valor: 10                   │
-│ ID   : 140298472...         │
-└─────────────────────────────┘
-```
-
----
-
-# 2.4 Variables y referencias
-
-Aquí aparece uno de los conceptos más importantes del lenguaje.
-
-Escribamos:
+En QGIS una capa vectorial también es un objeto.
 
 ```python
-x = 10
-y = x
+capa = iface.activeLayer()
 ```
 
-Muchos programadores imaginan:
+La variable `capa` no contiene la capa.
 
-```text
-x = 10
+Contiene una referencia a un objeto de tipo:
 
-y = 10
+```python
+QgsVectorLayer
 ```
 
-Sin embargo, Python funciona de otra manera.
+Ese objeto ofrece métodos como:
 
-```text
-        x
-         │
-         │
-         ▼
+```python
+capa.name()
 
-   ┌──────────────┐
-   │     int      │
-   │--------------│
-   │ Valor: 10    │
-   └──────────────┘
-         ▲
-         │
-         │
-        y
+capa.featureCount()
+
+capa.isEditable()
+
+capa.geometryType()
 ```
 
-Las variables **no contienen** el objeto.
+Observa que la forma de trabajar es exactamente igual que con una cadena de texto.
 
-Las variables simplemente **apuntan** al objeto.
+---
+
+# 🏗️ Diseño de Software
+
+Comenzaremos a construir el proyecto AQUA-SIG utilizando objetos.
+
+Por ahora representaremos una capa mediante un diccionario.
+
+```python
+capa = {
+    "nombre": "Red de Agua",
+    "tipo": "Vector",
+    "epsg": 32719
+}
+```
+
+Más adelante este diccionario evolucionará hasta convertirse en una clase.
+
+Finalmente será reemplazado por un objeto real de la API de QGIS.
+
+Esta evolución permitirá comprender cómo un modelo simple puede transformarse en una arquitectura profesional.
 
 ---
 
 # Laboratorio 1
 
-Ejecute el siguiente código.
+Crear objetos de diferentes tipos.
 
 ```python
-x = 10
-y = x
-
-print(id(x))
-print(id(y))
+numero = 25
+temperatura = 18.7
+nombre = "Rocha"
+activo = True
 ```
 
-Observe que ambos muestran la misma identidad.
+Mostrar para cada uno:
+
+- tipo;
+- identidad (`id()`);
+- representación (`print()`).
 
 ---
 
-# 2.5 Cambiando una referencia
+# Laboratorio 2
 
-Ahora ejecutemos:
+Crear una lista con nombres de ríos.
+
+Comprobar:
 
 ```python
-x = 99
+type()
 
-print(x)
-print(y)
+id()
 
-print(id(x))
-print(id(y))
-```
-
-Resultado esperado:
-
-```text
-99
-10
-```
-
-Python no modificó el objeto anterior.
-
-Creó un nuevo objeto y cambió la referencia de `x`.
-
-```text
-x ─────────► 99
-
-y ─────────► 10
+len()
 ```
 
 ---
 
-# 2.6 Descubriendo objetos
+# Laboratorio 3
 
-Una de las mayores fortalezas de Python es la introspección.
-
-Supongamos:
-
-```python
-texto = "QGIS Bolivia"
-```
-
-Podemos preguntar:
-
-```python
-type(texto)
-```
-
-Después:
-
-```python
-dir(texto)
-```
-
-Y finalmente:
-
-```python
-help(texto.replace)
-```
-
-Estas tres funciones serán utilizadas durante todo el libro.
+Crear un diccionario que represente una estación hidrométrica.
 
 ---
 
-# 2.7 La regla del desarrollador profesional
+# Laboratorio 4
 
-Cuando conozcas una librería nueva sigue siempre estos pasos.
-
-## Paso 1
-
-¿Qué es?
+En la consola de Python de QGIS:
 
 ```python
-type(objeto)
+iface.activeLayer()
+```
+
+Consultar:
+
+```python
+type(capa)
+```
+
+Explorar los métodos disponibles utilizando:
+
+```python
+dir(capa)
 ```
 
 ---
 
-## Paso 2
+# 💡 Consejo del Ingeniero
 
-¿Qué sabe hacer?
+Cuando aprendas un nuevo objeto, no memorices únicamente sus métodos.
 
-```python
-dir(objeto)
-```
+Pregúntate siempre:
 
----
+- ¿Qué representa?
+- ¿Qué información almacena?
+- ¿Qué operaciones puede realizar?
+- ¿Cómo se relaciona con otros objetos?
 
-## Paso 3
-
-¿Cómo funciona?
-
-```python
-help(objeto.metodo)
-```
-
-Con estas tres herramientas podrás explorar cualquier biblioteca Python.
-
----
-
-# Aplicación SIG
-
-Supongamos que existe una capa activa.
-
-```python
-layer = iface.activeLayer()
-```
-
-Podemos inspeccionarla.
-
-```python
-print(type(layer))
-```
-
-Luego:
-
-```python
-print(dir(layer))
-```
-
-Y finalmente:
-
-```python
-help(layer.featureCount)
-```
-
-De esta forma descubrimos la API de QGIS sin memorizar documentación.
-
----
-
-# Buenas prácticas
-
-> [!TIP]
-> Acostúmbrate a ejecutar `type()`, `dir()` y `help()` cada vez que trabajes con una nueva biblioteca.
-
-> [!IMPORTANT]
-> Comprender los objetos es mucho más importante que memorizar funciones.
+Pensar en objetos significa modelar correctamente el problema antes de escribir una sola línea de código.
 
 ---
 
 # Errores frecuentes
 
-❌ Pensar que una variable almacena un objeto.
+❌ Creer que una variable almacena un objeto.
 
-❌ Confundir clase con objeto.
+❌ Confundir identidad con valor.
 
-❌ Memorizar métodos sin comprender qué objeto los implementa.
+❌ Pensar que todos los objetos poseen los mismos métodos.
 
----
-
-# Laboratorio
-
-1. Crear un entero y consultar su tipo.
-2. Crear un texto y listar sus métodos.
-3. Crear una lista y explorar sus métodos.
-4. Obtener la capa activa de QGIS e inspeccionarla.
-5. Investigar qué métodos públicos posee `QgsVectorLayer`.
-
----
-
-# Ideas clave
-
-- Todo en Python es un objeto.
-- Todo objeto posee identidad.
-- Todo objeto posee tipo.
-- Todo objeto posee valor.
-- Las variables apuntan a objetos.
-- `type()` responde qué es un objeto.
-- `dir()` muestra sus métodos.
-- `help()` explica cómo funciona.
+❌ Modificar un objeto sin comprender que otras variables pueden estar apuntando al mismo lugar de memoria.
 
 ---
 
 # Resumen
 
-En este capítulo aprendimos que Python está completamente construido alrededor del concepto de objeto.
+En este capítulo descubrimos una de las ideas fundamentales de Python:
 
-Comprendimos que una variable no almacena directamente un valor, sino que referencia un objeto en memoria.
+> Todo es un objeto.
 
-También conocimos las herramientas de introspección (`type()`, `dir()` y `help()`), que nos permitirán explorar cualquier API, incluida la de QGIS.
+Comprendimos que una variable es simplemente un nombre asociado a un objeto, y que cada objeto posee una identidad, un tipo y un valor.
 
-Este conocimiento será esencial para comprender el comportamiento de listas, diccionarios, funciones, módulos y todas las clases que utilizaremos a lo largo del libro.
+Este modelo será la base para entender la memoria, las referencias, la orientación a objetos y el funcionamiento interno de bibliotecas como QGIS, PyQt y GeoPandas.
 
 ---
 
-# Próximo capítulo
+# Lo aprendido hoy
 
-**Capítulo 3 – Variables, Memoria y Referencias**
+Ahora sabes que:
 
-En el siguiente capítulo estudiaremos qué ocurre realmente en memoria cuando dos variables apuntan al mismo objeto.
+- una variable no contiene el objeto;
+- un objeto tiene identidad, tipo y valor;
+- los métodos pertenecen a los objetos;
+- la API de QGIS está formada por objetos;
+- este concepto acompañará todo el desarrollo del proyecto AQUA-SIG.
 
-Comprenderemos conceptos como:
+---
 
-- memoria
-- referencias
-- mutabilidad
-- inmutabilidad
-- contador de referencias
-- recolector de basura
+# Lo que construiremos mañana
 
-Estos conceptos explican muchos de los errores más comunes al trabajar con listas, diccionarios y objetos de QGIS.
+En el siguiente capítulo responderemos una pregunta que genera mucha confusión entre quienes vienen de otros lenguajes:
+
+> **¿Qué ocurre realmente cuando escribimos `a = b`?**
+
+Analizaremos la memoria, las referencias y el ciclo de vida de los objetos para comprender cómo Python gestiona la información.
+
+---
+
+# Bibliografía recomendada
+
+## Documentación oficial
+
+- Python Software Foundation. *Data Model*.
+- Python Software Foundation. *Built-in Types*.
+
+## Libros
+
+- Luciano Ramalho. *Fluent Python*.
+- Brett Slatkin. *Effective Python*.
+- David Beazley. *Python Cookbook*.
+- Mark Lutz. *Learning Python*.
+
+---
+
+> **"En Python no programamos manipulando variables; programamos estableciendo relaciones entre objetos. Comprender esa diferencia cambia por completo la forma de desarrollar software."**

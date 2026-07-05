@@ -1,18 +1,22 @@
 ---
 title: "Capítulo 3 - Variables, Memoria y Referencias"
 book: "Python Moderno para Desarrolladores SIG"
+subtitle: "Fundamentos, Arquitectura y Desarrollo Profesional con QGIS, PostGIS, PyQt e Inteligencia Artificial"
+edition: "Primera Edición"
+version: "2.0"
+module: "Módulo I - Fundamentos"
 chapter: 3
-version: 1.0
-status: En desarrollo
-author:
+status: "En desarrollo"
+authors:
   - Jorge Ayala Niño de Guzmán
   - ChatGPT (OpenAI)
-last_update: 2026-07-04
-level: Fundamentos
-estimated_time: "6 horas"
-prerequisites:
-  - Capítulo 2 - El Universo de los Objetos
+license: "CC BY-SA 4.0"
+last_update: "2026-07-04"
 ---
+
+# Python Moderno para Desarrolladores SIG
+
+## Módulo I — Fundamentos
 
 # Capítulo 3
 
@@ -20,420 +24,1439 @@ prerequisites:
 
 ---
 
-# Bitácora del Ingeniero
+# Ruta del Conocimiento
 
-Durante años observé el mismo error en cursos de programación.
+```text
+                     PYTHON MODERNO PARA DESARROLLADORES SIG
 
-Muchos estudiantes pensaban que una variable "guardaba" un dato.
+MÓDULO I — FUNDAMENTOS
 
-En Python esa idea no es correcta.
+✅ Capítulo 1  La Filosofía de Python
 
-Las variables simplemente mantienen una referencia hacia un objeto existente.
+✅ Capítulo 2  Todo es un Objeto
 
-Comprender esta diferencia evitará muchos errores cuando trabajemos con listas, diccionarios, objetos de QGIS y estructuras complejas.
+✅ Capítulo 3  Variables, Memoria y Referencias    ← Usted está aquí
+
+⬜ Capítulo 4  Tipos de Datos
+
+⬜ Capítulo 5  Colecciones
+
+⬜ Capítulo 6  Funciones
+
+⬜ Capítulo 7  Clases y Objetos
+
+⬜ Capítulo 8  Módulos y Paquetes
+```
 
 ---
 
-# Objetivos
+# Tiempo estimado
+
+| Concepto | Valor |
+|----------|-------|
+| Duración | 6 horas |
+| Dificultad | ⭐⭐⭐☆☆ |
+| Laboratorios | 5 |
+| Ejercicios | 12 |
+| Proyecto AQUA-SIG | Modelo de memoria y referencias |
+
+---
+
+# Historial de cambios
+
+## Versión 2.0
+
+### Cambios
+
+- Reestructuración completa del capítulo.
+- Explicación detallada del modelo de memoria de Python.
+- Diagramas conceptuales.
+- Introducción a referencias y mutabilidad.
+- Integración con el proyecto AQUA-SIG.
+
+---
+
+# Bitácora del Ingeniero
+
+Hasta este momento hemos aprendido dos ideas fundamentales.
+
+La primera fue que Python posee una filosofía basada en la simplicidad y la legibilidad del código.
+
+La segunda fue descubrir que todo en Python es un objeto.
+
+Ahora es momento de responder una pregunta mucho más profunda.
+
+**¿Cómo administra Python esos objetos?**
+
+Cada vez que escribimos una línea de código, el intérprete crea objetos, los almacena en memoria, los relaciona con nombres y controla automáticamente su ciclo de vida.
+
+Comprender este mecanismo permitirá escribir programas más seguros, evitar errores difíciles de detectar y entender con mayor facilidad bibliotecas complejas como PyQt, NumPy, GeoPandas o la API de QGIS.
+
+Este capítulo constituye uno de los pilares fundamentales del libro.
+
+---
+
+# Objetivos del capítulo
 
 Al finalizar este capítulo serás capaz de:
 
-- Comprender cómo administra la memoria Python.
-- Diferenciar objeto y referencia.
-- Comprender el concepto de mutabilidad.
-- Comprender la identidad de un objeto.
-- Entender el contador de referencias.
-- Comprender el funcionamiento básico del recolector de basura.
+- Comprender qué es una variable en Python.
+- Diferenciar entre un nombre y un objeto.
+- Comprender qué es una referencia.
+- Analizar el ciclo de vida de un objeto.
+- Entender la diferencia entre reasignar una referencia y modificar un objeto.
+- Comprender la diferencia entre objetos mutables e inmutables.
+- Aplicar estos conceptos al desarrollo de aplicaciones SIG.
 
 ---
 
-# 3.1 ¿Qué es una variable?
+# Introducción
 
-En muchos lenguajes tradicionales se enseña que una variable es "una caja donde se guarda información".
+Cuando comenzamos a programar solemos pensar que una variable es un espacio de memoria donde se almacena un dato.
 
-Esta idea resulta útil para comenzar, pero en Python no describe correctamente lo que ocurre.
+Aunque esa idea resulta útil para introducir algunos conceptos, no describe correctamente el funcionamiento interno de Python.
 
-Una definición más precisa sería:
+En Python existen tres elementos claramente diferenciados:
 
-> Una variable es un nombre que referencia un objeto existente en memoria.
+- El nombre.
+- El objeto.
+- La referencia entre ambos.
+
+Durante todo este capítulo aprenderemos a distinguir estos tres conceptos y veremos cómo interactúan entre sí.
+
+Una vez comprendidos, gran parte del comportamiento del lenguaje resultará mucho más intuitivo.
 
 ---
 
-# Veamos un ejemplo
+# ¿Qué ocurre cuando escribimos una asignación?
+
+Consideremos la siguiente instrucción.
 
 ```python
-x = 25
+x = 10
 ```
 
-Muchos imaginan:
+A simple vista parece una operación muy sencilla.
+
+Sin embargo, el intérprete realiza internamente varias tareas.
+
+De forma simplificada, el proceso es el siguiente.
+
+1. Obtiene un objeto entero con valor `10`.
+2. Si dicho objeto ya existe y puede reutilizarse, utiliza el existente.
+3. Si no existe, crea uno nuevo.
+4. Asocia el nombre `x` con ese objeto.
+5. Incrementa el contador de referencias del objeto.
+
+Todo este proceso ocurre en una fracción de segundo.
+
+El resultado final puede representarse mediante el siguiente diagrama.
 
 ```text
-┌───────┐
-│   x   │
-├───────┤
-│  25   │
-└───────┘
+Nombre
+
+x
+│
+│
+▼
+
+┌───────────────────────┐
+│       Objeto          │
+│-----------------------│
+│ Tipo : int            │
+│ Valor: 10             │
+└───────────────────────┘
 ```
 
-Python realmente hace algo más parecido a esto.
+Es importante observar que el nombre **no contiene** el objeto.
 
-```text
-          x
-          │
-          ▼
-
-   ┌───────────────┐
-   │     int       │
-   │---------------│
-   │ Valor : 25    │
-   └───────────────┘
-```
-
-La variable únicamente apunta al objeto.
+Únicamente permite acceder a él.
 
 ---
 
-# 3.2 Referencias
+# Nombres y objetos
 
-Ahora escribamos:
+En Python los nombres funcionan como etiquetas.
+
+Un nombre puede asociarse a cualquier objeto.
+
+Por ejemplo.
 
 ```python
-a = 25
+temperature = 18.5
+
+city = "Cochabamba"
+
+editable = True
+```
+
+En los tres casos ocurre exactamente el mismo mecanismo.
+
+Cada nombre queda asociado a un objeto diferente.
+
+```text
+temperature ─────► 18.5
+
+city ───────────► "Cochabamba"
+
+editable ───────► True
+```
+
+La diferencia entre ellos radica únicamente en el tipo del objeto.
+
+---
+
+# Todo objeto posee identidad
+
+Cada objeto creado por Python posee una identidad única durante la ejecución del programa.
+
+Podemos consultar dicha identidad mediante la función incorporada `id()`.
+
+```python
+value = 10
+
+print(id(value))
+```
+
+Resultado aproximado.
+
+```text
+140461357695152
+```
+
+Ese número representa la identidad del objeto durante la ejecución del programa.
+
+No debe interpretarse como una dirección física de memoria ni utilizarse para escribir lógica de aplicación.
+
+Su utilidad principal consiste en comprender cómo administra Python los objetos.
+
+---
+
+# El tipo del objeto
+
+Todo objeto conoce su propio tipo.
+
+Podemos consultarlo utilizando la función `type()`.
+
+```python
+value = 10
+
+print(type(value))
+```
+
+Resultado.
+
+```text
+<class 'int'>
+```
+
+Otro ejemplo.
+
+```python
+name = "Python"
+
+print(type(name))
+```
+
+Resultado.
+
+```text
+<class 'str'>
+```
+
+Y con una lista.
+
+```python
+layers = []
+
+print(type(layers))
+```
+
+Resultado.
+
+```text
+<class 'list'>
+```
+
+El tipo determina qué operaciones puede realizar el objeto y cuáles no.
+
+---
+
+# Las tres propiedades fundamentales
+
+En Python todos los objetos poseen tres propiedades esenciales.
+
+| Propiedad | Descripción |
+|------------|--------------------------------------------------------------|
+| Identidad | Permite distinguir un objeto de cualquier otro. |
+| Tipo | Define el comportamiento del objeto. |
+| Valor | Representa la información almacenada. |
+
+Podemos visualizar un objeto de la siguiente manera.
+
+```text
+┌────────────────────────────┐
+│         Objeto             │
+├────────────────────────────┤
+│ Tipo      : int            │
+│ Valor     : 10             │
+│ Identidad : 140461357...   │
+└────────────────────────────┘
+```
+
+Durante el resto del libro volveremos constantemente sobre estas tres propiedades.
+
+Son la base del modelo de objetos de Python.
+
+---
+
+# Referencias
+
+Cuando escribimos.
+
+```python
+a = 100
+```
+
+El nombre `a` queda asociado al objeto entero `100`.
+
+Si posteriormente escribimos.
+
+```python
 b = a
 ```
 
-En memoria ocurre:
+No se crea un nuevo entero.
+
+Simplemente aparece una segunda referencia hacia el mismo objeto.
 
 ```text
-        a
-         │
+a ───────┐
          │
          ▼
-
-   ┌───────────────┐
-   │     int       │
-   │---------------│
-   │ Valor : 25    │
-   └───────────────┘
+     ┌─────────┐
+     │   100   │
+     └─────────┘
          ▲
          │
-         │
-        b
+b ───────┘
 ```
 
-Existe un único objeto.
+Ambos nombres permiten acceder exactamente al mismo objeto.
 
-Dos variables lo referencian.
-
----
-
-# Laboratorio 1
-
-Ejecute:
+Podemos comprobarlo fácilmente.
 
 ```python
-a = 25
+a = 100
 b = a
 
 print(id(a))
 print(id(b))
 ```
 
-Ambos muestran la misma identidad.
+Los dos resultados serán iguales porque ambos nombres hacen referencia al mismo objeto.
 
 ---
 
-# 3.3 Cambiando una referencia
+# Reasignación
 
-Ahora escriba:
+Ahora analizaremos el siguiente código.
 
 ```python
 a = 100
 
-print(a)
-print(b)
+b = a
 
-print(id(a))
-print(id(b))
+a = 250
 ```
 
-Resultado esperado:
+¿Qué ocurrió?
+
+El objeto `100` continúa existiendo.
+
+La única diferencia es que el nombre `a` dejó de apuntar a dicho objeto y comenzó a referirse a otro diferente.
+
+El resultado puede representarse así.
 
 ```text
-100
-25
+a ─────────► 250
+
+
+b ─────────► 100
 ```
 
-Python creó un objeto nuevo.
+Este comportamiento constituye una de las ideas más importantes del lenguaje.
 
-```text
-a ─────────► 100
+Python no modifica el objeto entero.
 
-b ─────────► 25
-```
-
-No modificó el objeto anterior.
+Simplemente cambia la referencia del nombre.
 
 ---
 
-# 3.4 Objetos mutables e inmutables
+# Resumen de la Parte 1
 
-Aquí aparece un concepto extremadamente importante.
+En esta primera parte hemos aprendido que:
 
-Existen dos grandes categorías.
+- Una variable es un nombre.
+- Un nombre hace referencia a un objeto.
+- Todo objeto posee identidad, tipo y valor.
+- La asignación crea asociaciones entre nombres y objetos.
+- Reasignar un nombre no implica modificar el objeto existente.
 
-## Objetos inmutables
-
-Nunca cambian.
-
-Ejemplos:
-
-- int
-- float
-- bool
-- str
-- tuple
-
-Cuando parecen cambiar, Python crea un objeto nuevo.
+En la siguiente parte profundizaremos en uno de los conceptos más importantes del lenguaje: **la mutabilidad**, el funcionamiento de las listas y diccionarios, y cómo CPython administra las referencias en memoria.
 
 ---
 
-## Objetos mutables
+# Objetos mutables e inmutables
 
-Sí pueden modificarse.
+Una de las características más importantes del modelo de objetos de Python es que **no todos los objetos pueden modificarse** después de haber sido creados.
 
-Ejemplos:
+Dependiendo de su comportamiento, los objetos se clasifican en dos grandes grupos:
 
-- list
-- dict
-- set
+- Objetos **inmutables** (*immutable objects*).
+- Objetos **mutables** (*mutable objects*).
 
-Aquí comienzan muchos errores de programación.
+Comprender esta diferencia permitirá explicar el comportamiento de las listas, diccionarios, funciones y clases durante todo el resto del libro.
+
+---
+
+# Objetos inmutables
+
+Un objeto inmutable no puede cambiar su contenido una vez creado.
+
+Si aparentemente cambia, en realidad Python crea un nuevo objeto.
+
+Los principales tipos inmutables son:
+
+| Tipo | Descripción |
+|-------|-------------|
+| int | Números enteros |
+| float | Números reales |
+| bool | Valores lógicos |
+| complex | Números complejos |
+| str | Cadenas de texto |
+| tuple | Tuplas |
+
+Veamos un ejemplo.
+
+```python
+number = 15
+
+print(id(number))
+
+number = 30
+
+print(id(number))
+```
+
+La salida será similar a:
+
+```text
+140503428614800
+140503428615440
+```
+
+Observa que el identificador cambió.
+
+No se modificó el objeto original.
+
+Python creó un nuevo objeto entero y el nombre `number` pasó a referirse a él.
+
+---
+
+# Visualizando la reasignación
+
+Antes de la reasignación:
+
+```text
+number
+   │
+   ▼
+┌──────────┐
+│ int      │
+│ Valor 15 │
+└──────────┘
+```
+
+Después:
+
+```text
+number
+   │
+   ▼
+┌──────────┐
+│ int      │
+│ Valor 30 │
+└──────────┘
+```
+
+El objeto con valor **15** continúa existiendo mientras alguna referencia siga apuntando hacia él.
+
+En caso contrario, Python podrá liberar la memoria automáticamente.
+
+---
+
+# Objetos mutables
+
+Los objetos mutables sí permiten modificar su contenido.
+
+Entre los más utilizados encontramos:
+
+| Tipo | Descripción |
+|-------|-------------|
+| list | Lista |
+| dict | Diccionario |
+| set | Conjunto |
+| bytearray | Arreglo de bytes |
+
+En este caso el objeto permanece siendo el mismo.
+
+Lo que cambia es su contenido interno.
+
+---
+
+# Primer ejemplo con listas
+
+```python
+layers = [
+    "Water Network",
+    "Sewer Network"
+]
+
+print(id(layers))
+```
+
+Ahora agregamos un nuevo elemento.
+
+```python
+layers.append("Hydrants")
+
+print(id(layers))
+```
+
+El identificador será el mismo.
+
+Python modificó el contenido del objeto existente.
+
+No creó una lista nueva.
+
+---
+
+# Representación gráfica
+
+Antes:
+
+```text
+layers
+   │
+   ▼
+
+┌───────────────────────────────┐
+│ Water Network                 │
+│ Sewer Network                 │
+└───────────────────────────────┘
+```
+
+Después del método `append()`:
+
+```text
+layers
+   │
+   ▼
+
+┌───────────────────────────────┐
+│ Water Network                 │
+│ Sewer Network                 │
+│ Hydrants                      │
+└───────────────────────────────┘
+```
+
+La referencia no cambió.
+
+Cambió el contenido del objeto.
+
+---
+
+# Compartiendo referencias
+
+Analicemos el siguiente código.
+
+```python
+layers = [
+    "Water",
+    "Sewer"
+]
+
+backup = layers
+```
+
+Muchos programadores imaginan que existen dos listas.
+
+En realidad solamente existe una.
+
+```text
+layers ─────┐
+            │
+            ▼
+
+     ┌──────────────────────┐
+     │ Water                │
+     │ Sewer                │
+     └──────────────────────┘
+            ▲
+            │
+backup ─────┘
+```
+
+Ambos nombres hacen referencia exactamente al mismo objeto.
+
+---
+
+# Modificando una referencia compartida
+
+Ahora ejecutamos.
+
+```python
+layers.append("Hydrants")
+```
+
+¿Qué ocurre?
+
+```python
+print(backup)
+```
+
+Resultado.
+
+```text
+['Water', 'Sewer', 'Hydrants']
+```
+
+¿Por qué apareció el nuevo elemento?
+
+Porque **no existen dos listas**.
+
+Existe una única lista con dos referencias.
+
+---
+
+# Comprobándolo mediante id()
+
+```python
+layers = [
+    "Water",
+    "Sewer"
+]
+
+backup = layers
+
+print(id(layers))
+print(id(backup))
+```
+
+La salida será similar a:
+
+```text
+2250843847552
+2250843847552
+```
+
+El mismo identificador confirma que ambos nombres hacen referencia al mismo objeto.
+
+---
+
+# Copiando un objeto
+
+En muchas situaciones necesitamos una copia independiente.
+
+Para ello podemos utilizar el método `copy()`.
+
+```python
+layers = [
+    "Water",
+    "Sewer"
+]
+
+backup = layers.copy()
+```
+
+Ahora sí existen dos listas.
+
+```text
+layers ─────► Lista A
+
+backup ─────► Lista B
+```
+
+Modificar una de ellas no afectará a la otra.
 
 ---
 
 # Ejemplo
 
 ```python
-lista1 = [10,20,30]
+layers = [
+    "Water",
+    "Sewer"
+]
 
-lista2 = lista1
+backup = layers.copy()
+
+layers.append("Hydrants")
+
+print(layers)
+
+print(backup)
 ```
 
-En memoria.
+Resultado.
 
 ```text
-            lista1
+['Water', 'Sewer', 'Hydrants']
+
+['Water', 'Sewer']
+```
+
+Cada variable hace referencia a un objeto diferente.
+
+---
+
+# Copia superficial
+
+El método `copy()` realiza una **copia superficial** (*shallow copy*).
+
+Esto significa que únicamente copia el primer nivel de la estructura.
+
+Por ejemplo.
+
+```python
+network = [
+    ["Water"],
+    ["Sewer"]
+]
+
+backup = network.copy()
+```
+
+La lista principal fue duplicada.
+
+Sin embargo, las listas internas continúan compartiéndose.
+
+Este comportamiento será estudiado con mayor profundidad cuando trabajemos con módulos especializados como `copy`.
+
+---
+
+# ¿Cuándo utilizar referencias?
+
+Las referencias son útiles cuando varias partes del programa necesitan trabajar sobre el mismo objeto.
+
+Por ejemplo.
+
+- Una capa activa en QGIS.
+- Una conexión a una base de datos.
+- Una configuración compartida.
+- Un proyecto abierto.
+
+En estos casos resulta más eficiente compartir un único objeto que crear múltiples copias.
+
+---
+
+# ¿Cuándo utilizar copias?
+
+Las copias son recomendables cuando deseamos preservar el estado original de un objeto.
+
+Algunos ejemplos son:
+
+- Antes de aplicar un algoritmo de procesamiento.
+- Antes de modificar una configuración.
+- Para implementar operaciones de deshacer (*Undo*).
+- Para comparar estados antes y después de un procesamiento.
+
+Elegir correctamente entre compartir referencias o crear copias es una decisión de diseño importante.
+
+---
+
+# Resumen de la Parte 2
+
+En esta parte aprendimos que:
+
+- Existen objetos mutables e inmutables.
+- Los objetos inmutables nunca cambian.
+- Los objetos mutables pueden modificar su contenido.
+- Dos variables pueden compartir una misma referencia.
+- `copy()` crea una nueva colección independiente.
+- Compartir referencias y crear copias son decisiones de diseño diferentes.
+
+En la siguiente parte estudiaremos cómo **CPython administra la memoria**, el conteo de referencias (*Reference Counting*) y el funcionamiento del recolector de basura (*Garbage Collector*), conceptos esenciales para comprender el ciclo de vida de los objetos.
+
+---
+
+# Internamente (CPython)
+
+Hasta ahora hemos estudiado el comportamiento visible de los objetos. Sin embargo, una de las fortalezas de Python es que gran parte de la administración de memoria ocurre automáticamente.
+
+Como desarrolladores no necesitamos reservar ni liberar memoria manualmente, pero comprender cómo funciona este mecanismo nos ayudará a escribir programas más eficientes y a entender el comportamiento de bibliotecas como NumPy, PyQt, GeoPandas o la API de QGIS.
+
+---
+
+# El ciclo de vida de un objeto
+
+Todo objeto creado durante la ejecución de un programa atraviesa un ciclo de vida compuesto por varias etapas.
+
+```text
+           Creación
                │
                ▼
-
-      ┌────────────────┐
-      │ 10 │20 │30 │
-      └────────────────┘
-               ▲
+      Asociación a un nombre
                │
-            lista2
+               ▼
+          Utilización
+               │
+               ▼
+      Pérdida de referencias
+               │
+               ▼
+      Liberación de memoria
 ```
 
-Ahora:
+Este proceso ocurre continuamente durante la ejecución de cualquier programa en Python.
+
+---
+
+# Creación de objetos
+
+Cada vez que escribimos una instrucción como:
 
 ```python
-lista2.append(40)
+layer_name = "Water Network"
 ```
 
-¿Qué ocurre?
+Python crea un objeto de tipo `str` (o reutiliza uno existente cuando es posible) y asocia el nombre `layer_name` a dicho objeto.
 
-Muchos esperan:
-
-```text
-lista1
-
-10 20 30
-```
-
-Pero realmente obtenemos:
-
-```text
-lista1
-
-10 20 30 40
-```
-
-¿Por qué?
-
-Porque ambas variables apuntan exactamente al mismo objeto.
-
----
-
-# Laboratorio 2
-
-Ejecute.
+Lo mismo ocurre con cualquier otro tipo de dato.
 
 ```python
-lista1 = [10,20,30]
+count = 25
 
-lista2 = lista1
+coordinates = []
 
-lista2.append(40)
-
-print(lista1)
-
-print(lista2)
+station = {}
 ```
 
-Analice cuidadosamente el resultado.
+Cada instrucción produce uno o varios objetos nuevos.
 
 ---
 
-# 3.5 ¿Cómo copiar correctamente una lista?
+# Referencias
 
-Si realmente queremos una copia.
+Cuando un nombre apunta a un objeto, se dice que existe una referencia.
 
 ```python
-lista2 = lista1.copy()
+a = 100
+
+b = a
 ```
 
-Ahora existen dos objetos diferentes.
+Ahora existen dos referencias hacia el mismo objeto.
 
 ```text
-lista1 ─────► [10 20 30]
-
-lista2 ─────► [10 20 30]
+a ───────┐
+         │
+         ▼
+    ┌────────────┐
+    │    100     │
+    └────────────┘
+         ▲
+         │
+b ───────┘
 ```
 
-Cada uno puede modificarse independientemente.
+Mientras exista al menos una referencia, el objeto seguirá disponible.
 
 ---
 
-# 3.6 Contador de referencias
+# Conteo de referencias
 
-Python mantiene internamente un contador.
+CPython utiliza principalmente un mecanismo denominado **Reference Counting**.
 
-Cada vez que una variable apunta hacia un objeto.
+Cada objeto mantiene internamente un contador que indica cuántas referencias existen hacia él.
 
-El contador aumenta.
+Podemos imaginarlo así.
 
-Cuando una variable deja de apuntar.
+```text
+Objeto
 
-El contador disminuye.
+┌─────────────────────┐
+│ Valor : 100         │
+│ Referencias : 2     │
+└─────────────────────┘
+```
 
-Cuando llega a cero.
+Cuando ejecutamos:
 
-El objeto puede eliminarse de memoria.
+```python
+a = None
+```
 
-Este mecanismo recibe el nombre de:
+el contador disminuye.
 
-**Reference Counting**
+```text
+Objeto
+
+┌─────────────────────┐
+│ Valor : 100         │
+│ Referencias : 1     │
+└─────────────────────┘
+```
+
+Si posteriormente escribimos:
+
+```python
+b = None
+```
+
+el contador llegará a cero.
+
+```text
+Objeto
+
+┌─────────────────────┐
+│ Valor : 100         │
+│ Referencias : 0     │
+└─────────────────────┘
+```
+
+En ese momento Python puede liberar la memoria utilizada por dicho objeto.
 
 ---
 
-# 3.7 Recolector de basura
+# El recolector de basura
 
-Algunos objetos forman ciclos de referencias.
+Existen situaciones donde dos objetos se referencian mutuamente.
 
-En estos casos el contador no es suficiente.
+Por ejemplo:
 
-Python incorpora un segundo mecanismo.
+```text
+Objeto A ─────► Objeto B
+     ▲             │
+     └─────────────┘
+```
 
-El **Garbage Collector**.
+Aunque ya no exista ningún nombre que permita acceder a ellos, ambos continúan manteniendo referencias entre sí.
 
-Su objetivo es detectar objetos que ya no pueden utilizarse y liberar la memoria.
+Para resolver estos casos CPython incorpora un **Garbage Collector**, encargado de detectar objetos inaccesibles y liberar automáticamente la memoria.
 
-En capítulos posteriores estudiaremos el módulo `gc`.
+En la mayoría de los programas este proceso es completamente transparente para el desarrollador.
 
 ---
 
-# Aplicación SIG
+# ¿Debemos preocuparnos por la memoria?
 
-Supongamos.
+En la mayoría de las aplicaciones, no.
+
+Python administra automáticamente la memoria y elimina los objetos que dejan de utilizarse.
+
+Sin embargo, comprender este mecanismo resulta muy útil cuando trabajamos con:
+
+- grandes volúmenes de datos;
+- imágenes satelitales;
+- nubes de puntos LiDAR;
+- modelos digitales de elevación;
+- capas vectoriales con millones de entidades.
+
+En estos casos, conocer el ciclo de vida de los objetos ayuda a reducir el consumo de memoria y mejorar el rendimiento de las aplicaciones.
+
+---
+
+# El objeto `None`
+
+Python dispone de un objeto especial llamado `None`.
+
+Representa la ausencia de un valor.
+
+```python
+layer = None
+```
+
+Esto no elimina el objeto anterior.
+
+Simplemente hace que el nombre `layer` deje de apuntar a él y pase a referirse al objeto `None`.
+
+```text
+Antes
+
+layer ─────► QgsVectorLayer
+
+Después
+
+layer ─────► None
+```
+
+Si ninguna otra referencia apunta al objeto original, este podrá ser liberado por Python.
+
+---
+
+# 🌎 Aplicación en SIG
+
+Supongamos que abrimos una capa en QGIS.
+
+```python
+layer = iface.activeLayer()
+```
+
+Posteriormente obtenemos una segunda referencia.
+
+```python
+selected_layer = layer
+```
+
+Ahora ambas variables apuntan al mismo objeto.
+
+```text
+layer ─────────────┐
+                   │
+                   ▼
+          QgsVectorLayer
+                   ▲
+                   │
+selected_layer ────┘
+```
+
+Si iniciamos una edición:
+
+```python
+layer.startEditing()
+```
+
+también observaremos el cambio mediante:
+
+```python
+selected_layer.isEditable()
+```
+
+porque ambas referencias representan el mismo objeto.
+
+Comprender este comportamiento evita muchos errores al desarrollar complementos para QGIS.
+
+---
+
+# 🏗️ Diseño de Software — AQUA-SIG
+
+En AQUA-SIG cada elemento importante del sistema será representado mediante un objeto.
+
+Por ejemplo:
+
+```python
+project = {
+    "name": "AQUA-SIG",
+    "layers": [],
+    "version": "1.0"
+}
+```
+
+A medida que el libro avance, este modelo evolucionará.
+
+```text
+Diccionario
+
+        │
+
+        ▼
+
+Clase Project
+
+        │
+
+        ▼
+
+Objeto Project
+
+        │
+
+        ▼
+
+Aplicación completa
+```
+
+Este crecimiento progresivo permitirá comprender cómo un diseño sencillo puede transformarse en una arquitectura profesional.
+
+---
+
+# Consejo del Ingeniero
+
+Cuando observes un comportamiento inesperado en un programa, no pienses únicamente en el código que acabas de escribir.
+
+Pregúntate también:
+
+- ¿Cuántas referencias existen hacia este objeto?
+- ¿Estoy modificando el objeto correcto?
+- ¿Necesito compartirlo o crear una copia?
+
+En muchas ocasiones, responder estas preguntas permite localizar el problema mucho más rápido que revisar cientos de líneas de código.
+
+---
+
+# Resumen de la Parte 3
+
+En esta parte aprendimos que:
+
+- Todo objeto tiene un ciclo de vida.
+- CPython utiliza conteo de referencias para administrar la memoria.
+- El recolector de basura elimina objetos inaccesibles.
+- `None` es un objeto especial que representa la ausencia de valor.
+- Comprender la memoria facilita el desarrollo de aplicaciones SIG robustas y eficientes.
+
+En la **Parte 4** concluiremos el capítulo con laboratorios prácticos, ejercicios de análisis, errores frecuentes, un resumen general y la conexión con el siguiente capítulo.
+
+---
+
+# Laboratorio 1 — Explorando Objetos
+
+## Objetivo
+
+Comprender que toda variable hace referencia a un objeto y que cada objeto posee una identidad, un tipo y un valor.
+
+### Ejercicio
+
+Crear el siguiente programa.
+
+```python
+integer_value = 25
+float_value = 18.75
+text_value = "Python"
+boolean_value = True
+
+print(type(integer_value), id(integer_value))
+print(type(float_value), id(float_value))
+print(type(text_value), id(text_value))
+print(type(boolean_value), id(boolean_value))
+```
+
+### Preguntas
+
+1. ¿Todos los objetos poseen un identificador?
+2. ¿Qué representa el resultado de `type()`?
+3. ¿Puede cambiar el identificador de un objeto durante su vida útil?
+
+---
+
+# Laboratorio 2 — Referencias
+
+Crear el siguiente programa.
+
+```python
+layer_name = "Water Network"
+
+another_name = layer_name
+
+print(id(layer_name))
+print(id(another_name))
+```
+
+Responder.
+
+- ¿Cuántos objetos existen?
+- ¿Cuántos nombres hacen referencia al objeto?
+
+---
+
+# Laboratorio 3 — Objetos Mutables
+
+```python
+layers = [
+    "Water",
+    "Sewer"
+]
+
+backup = layers
+
+layers.append("Hydrants")
+
+print(layers)
+print(backup)
+```
+
+Analizar.
+
+¿Por qué ambas variables muestran exactamente el mismo contenido?
+
+Realizar un diagrama de memoria representando la situación.
+
+---
+
+# Laboratorio 4 — Copias
+
+Modificar el ejemplo anterior.
+
+```python
+layers = [
+    "Water",
+    "Sewer"
+]
+
+backup = layers.copy()
+
+layers.append("Hydrants")
+
+print(layers)
+print(backup)
+```
+
+Responder.
+
+- ¿Cuántas listas existen ahora?
+- ¿Por qué el contenido es diferente?
+
+---
+
+# Laboratorio 5 — Consola Python de QGIS
+
+Abrir QGIS.
+
+Seleccionar una capa vectorial.
+
+En la Consola Python ejecutar.
 
 ```python
 layer = iface.activeLayer()
 
-otra = layer
+print(layer)
+
+print(type(layer))
+
+print(id(layer))
 ```
 
-Ambas variables apuntan exactamente a la misma capa.
+Ahora crear otra referencia.
 
-Si modificamos propiedades mediante una referencia.
+```python
+other = layer
 
-La otra también observará los cambios.
+print(id(other))
+```
 
-Este comportamiento resulta fundamental cuando trabajemos con la API de QGIS.
+Comprobar que ambos nombres hacen referencia al mismo objeto.
+
+---
+
+# Laboratorio 6 — Explorando Objetos
+
+Python incorpora la función `dir()`.
+
+Permite conocer los atributos y métodos disponibles.
+
+```python
+layer = iface.activeLayer()
+
+print(dir(layer))
+```
+
+Observar la gran cantidad de métodos disponibles.
+
+En capítulos posteriores aprenderemos a utilizar muchos de ellos.
 
 ---
 
 # Buenas prácticas
 
-> [!TIP]
-> Antes de copiar una lista pregúntese si necesita una referencia o una copia independiente.
+A partir de este capítulo seguiremos algunas recomendaciones que aparecerán durante todo el libro.
 
-> [!IMPORTANT]
-> Comprender referencias evita algunos de los errores más frecuentes en Python.
+## Utilizar nombres descriptivos
+
+Incorrecto.
+
+```python
+a = []
+```
+
+Correcto.
+
+```python
+layers = []
+```
+
+---
+
+Incorrecto.
+
+```python
+x = 32719
+```
+
+Correcto.
+
+```python
+epsg_code = 32719
+```
+
+Los nombres descriptivos facilitan enormemente la lectura del código.
+
+---
+
+## No modificar objetos accidentalmente
+
+Antes de modificar una lista importante pregúntate.
+
+> ¿Deseo modificar el objeto original o necesito una copia?
+
+Cuando exista duda, analiza cuidadosamente si debes utilizar una referencia o crear una copia.
+
+---
+
+## Comprender antes de optimizar
+
+Python administra automáticamente la memoria.
+
+No intentes optimizar el consumo de memoria sin comprender previamente cómo funciona el modelo de objetos.
+
+Un diseño claro suele producir mejores resultados que una optimización prematura.
 
 ---
 
 # Errores frecuentes
 
-❌ Pensar que `=` siempre crea una copia.
+## Error 1
 
-❌ Modificar listas creyendo que son independientes.
+Pensar que una variable contiene un dato.
 
-❌ Confundir identidad con igualdad.
-
----
-
-# Laboratorio
-
-1. Comparar `id()` de enteros.
-
-2. Comparar `id()` de listas.
-
-3. Crear dos referencias a un diccionario.
-
-4. Modificar una referencia.
-
-5. Analizar el resultado.
-
-6. Repetir utilizando `.copy()`.
+En realidad contiene una referencia hacia un objeto.
 
 ---
 
-# Ideas clave
+## Error 2
 
-- Una variable no almacena un objeto.
-- Una variable referencia un objeto.
-- `=` no significa copiar.
-- Existen objetos mutables e inmutables.
-- Las listas son mutables.
-- Los enteros son inmutables.
-- Python utiliza un contador de referencias.
-- Python incorpora un recolector de basura.
+Confundir una referencia con una copia.
+
+```python
+a = b
+```
+
+No crea una copia.
+
+Únicamente crea una nueva referencia.
+
+---
+
+## Error 3
+
+Modificar listas compartidas sin saberlo.
+
+```python
+backup = layers
+```
+
+Ambas variables representan el mismo objeto.
+
+---
+
+## Error 4
+
+Olvidar que las listas son mutables.
+
+```python
+layers.append(...)
+```
+
+El objeto cambia.
+
+No se crea una nueva lista.
+
+---
+
+## Error 5
+
+Pensar que `id()` representa una dirección física de memoria.
+
+El resultado de `id()` debe interpretarse únicamente como un identificador del objeto durante la ejecución del programa.
+
+---
+
+# Conceptos clave
+
+Al finalizar este capítulo deberías dominar los siguientes conceptos.
+
+- Objeto
+- Nombre
+- Referencia
+- Identidad
+- Tipo
+- Valor
+- Mutabilidad
+- Inmutabilidad
+- Conteo de referencias
+- Recolector de basura
+- Reasignación
+- Copia
+- Referencia compartida
+
+Estos conceptos aparecerán continuamente durante el resto del libro.
 
 ---
 
 # Resumen
 
-En este capítulo aprendimos cómo administra Python las referencias a los objetos.
+En este capítulo profundizamos en el funcionamiento interno del modelo de objetos de Python.
 
-Comprendimos la diferencia entre crear una nueva referencia y crear una copia independiente.
+Aprendimos que una variable no almacena directamente un valor, sino que actúa como un nombre asociado a un objeto.
 
-También introdujimos los conceptos de mutabilidad, contador de referencias y recolección de basura.
+Estudiamos cómo Python administra las referencias, analizamos la diferencia entre objetos mutables e inmutables y comprendimos el papel del conteo de referencias y del recolector de basura dentro de CPython.
 
-Estos conceptos serán esenciales para comprender el comportamiento de listas, diccionarios y objetos complejos utilizados por QGIS.
+Estos conocimientos constituyen la base necesaria para comprender estructuras de datos más complejas, funciones, clases y el funcionamiento interno de bibliotecas como QGIS, PyQt y GeoPandas.
+
+A partir de este momento utilizaremos estos conceptos de manera natural en todos los capítulos siguientes.
 
 ---
 
-# Próximo capítulo
+# Lo aprendido hoy
 
-**Capítulo 4 — Tipos de Datos**
+Ahora sabes que:
 
-Estudiaremos en profundidad los tipos fundamentales de Python:
+- Una variable es un nombre asociado a un objeto.
+- Todo objeto posee identidad, tipo y valor.
+- La asignación crea referencias.
+- Existen objetos mutables e inmutables.
+- Compartir una referencia no equivale a crear una copia.
+- CPython administra automáticamente la memoria mediante conteo de referencias y un recolector de basura.
+- Comprender el modelo de objetos facilita el desarrollo de aplicaciones robustas con Python y QGIS.
 
-- int
-- float
-- bool
-- str
-- bytes
+---
 
-Comprenderemos cómo están implementados, por qué existen y cómo utilizarlos eficientemente.
+# Lo que construiremos mañana
+
+Hasta ahora hemos trabajado con objetos sin estudiar en detalle sus características.
+
+En el siguiente capítulo conoceremos los **tipos de datos fundamentales de Python**.
+
+Aprenderemos cómo representar correctamente números, cadenas de texto, valores lógicos y otros tipos básicos, comprendiendo cuándo utilizar cada uno dentro del proyecto AQUA-SIG.
+
+Ese conocimiento será la base para comenzar a construir estructuras de datos más complejas en los capítulos posteriores.
+
+---
+
+# Bibliografía recomendada
+
+## Documentación oficial
+
+- Python Software Foundation. *The Python Data Model*.
+- Python Software Foundation. *Built-in Types*.
+- Python Software Foundation. *Data Structures*.
+
+## Libros
+
+- Luciano Ramalho. *Fluent Python*.
+- Brett Slatkin. *Effective Python*.
+- David Beazley. *Python Cookbook*.
+- Mark Lutz. *Learning Python*.
+
+## Recursos adicionales
+
+- Documentación oficial de QGIS.
+- Documentación oficial de PyQGIS.
+- Documentación oficial de GeoPandas.
+- Documentación oficial de Shapely.
+
+---
+
+> *"Comprender el modelo de objetos de Python significa comprender el lenguaje. A partir de este capítulo, cada línea de código tendrá un significado mucho más profundo que una simple secuencia de instrucciones."*
+
+---

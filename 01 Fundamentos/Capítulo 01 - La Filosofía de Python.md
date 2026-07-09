@@ -15,10 +15,6 @@ repository: "https://github.com/..."
 last_update: "2026-07-04"
 ---
 
-# Python Moderno para Desarrolladores SIG
-
-## Módulo I — Fundamentos
-
 # Capítulo 1
 
 # La Filosofía de Python

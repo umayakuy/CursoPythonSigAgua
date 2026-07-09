@@ -63,22 +63,6 @@ MÓDULO I — FUNDAMENTOS
 
 ---
 
-# Historial de cambios
-
-## Versión 2.0
-
-### Cambios
-
-- Reestructuración completa del capítulo.
-- Integración del Proyecto AQUA-SIG.
-- Nueva estructura editorial.
-- Inclusión de la Ruta del Conocimiento.
-- Sección "Bitácora del Ingeniero".
-- Nueva metodología de aprendizaje.
-- Preparación para la API de QGIS.
-
----
-
 # Bitácora del Ingeniero
 
 Hace muchos años aprendí a programar utilizando BASIC.

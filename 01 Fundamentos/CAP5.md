@@ -367,5 +367,371 @@ Por ello, dominar las listas simplificará enormemente el aprendizaje de PyQGIS.
 Una lista representa mucho más que una estructura de datos.
 
 Es el primer paso para convertir una red de agua potable, un inventario técnico o una campaña de monitoreo en un modelo computacional capaz de ser procesado automáticamente mediante Python.
+
+# 5.5 Operaciones Fundamentales con Listas
+
+Hasta este punto aprendimos que una lista permite representar un conjunto de datos relacionados. Sin embargo, su verdadero potencial aparece cuando comenzamos a **administrar** esa información.
+
+En una Empresa Prestadora de Servicios de Agua Potable (EPSA), diariamente se incorporan nuevos activos, se actualizan registros y se eliminan datos incorrectos. Las listas permiten realizar estas operaciones de forma sencilla y eficiente.
+
+---
+
+## 💧 Ingeniería del Agua en Acción
+
+Durante una ampliación de la red de distribución se instalaron tres nuevas tuberías de PVC.
+
+El Área de Catastro Técnico debe actualizar el inventario.
+
+Inicialmente se dispone del siguiente listado de códigos:
+
+```python
+tuberias = [
+    "T-001",
+    "T-002",
+    "T-003"
+]
+```
+
+Posteriormente se instala una nueva tubería.
+
+```python
+tuberias.append("T-004")
+
+print(tuberias)
+```
+
+Resultado:
+
+```text
+['T-001', 'T-002', 'T-003', 'T-004']
+```
+
+La operación `append()` incorpora un nuevo elemento al final de la lista.
+
+---
+
+## Agregar varios elementos
+
+Durante otra jornada se registran dos nuevas tuberías.
+
+```python
+tuberias.extend([
+    "T-005",
+    "T-006"
+])
+```
+
+Ahora la colección representa de forma fiel el inventario actualizado.
+
+---
+
+## Insertar un elemento en una posición específica
+
+Si por motivos de organización se requiere incorporar un registro en una posición determinada:
+
+```python
+tuberias.insert(1, "T-001A")
+```
+
+Resultado conceptual:
+
+```text
+Antes
+
+T-001
+T-002
+T-003
+
+Después
+
+T-001
+T-001A
+T-002
+T-003
+```
+
+---
+
+## Eliminar información
+
+En ocasiones un registro fue cargado por error o corresponde a un activo dado de baja.
+
+Eliminar por valor:
+
+```python
+tuberias.remove("T-001A")
+```
+
+Eliminar por posición:
+
+```python
+tuberias.pop(0)
+```
+
+Eliminar toda la colección:
+
+```python
+tuberias.clear()
+```
+
+Cada operación responde a una necesidad distinta.
+
+---
+
+## Conociendo el tamaño del inventario
+
+Es frecuente responder preguntas como:
+
+- ¿Cuántos pozos existen?
+- ¿Cuántas válvulas fueron inspeccionadas?
+- ¿Cuántas muestras de agua se analizaron?
+
+La función `len()` responde estas preguntas.
+
+```python
+pozos = [
+    "PZ-001",
+    "PZ-002",
+    "PZ-003",
+    "PZ-004"
+]
+
+print(len(pozos))
+```
+
+Resultado:
+
+```text
+4
+```
+
+---
+
+## Recorriendo una lista
+
+Hasta ahora accedimos a elementos individuales.
+
+Pero la mayor fortaleza de una lista consiste en procesar automáticamente todos sus elementos.
+
+Supongamos que se registraron las presiones (m.c.a.) en distintos puntos de la red.
+
+```python
+presiones_mca = [
+    28.4,
+    30.1,
+    29.6,
+    31.8,
+    27.9
+]
+```
+
+Podemos recorrerlas utilizando un ciclo `for`.
+
+```python
+for presion in presiones_mca:
+    print(f"{presion} m.c.a.")
+```
+
+Resultado:
+
+```text
+28.4 m.c.a.
+30.1 m.c.a.
+29.6 m.c.a.
+31.8 m.c.a.
+27.9 m.c.a.
+```
+
+En este momento no profundizaremos en el funcionamiento de `for`; ese tema será desarrollado en el capítulo dedicado al control del flujo. Por ahora basta comprender que una lista puede procesarse elemento por elemento de manera automática.
+
+---
+
+## 🏗️ Modelando un Activo de la Red
+
+Antes de continuar, pensemos en la información que caracteriza una tubería.
+
+No existe únicamente un diámetro.
+
+También existen:
+
+- código;
+- material;
+- longitud;
+- presión de operación;
+- año de instalación;
+- estado.
+
+Una sola lista de diámetros ya no será suficiente.
+
+Necesitaremos una estructura capaz de asociar múltiples atributos a un mismo elemento.
+
+Esa necesidad dará origen a una nueva colección que estudiaremos más adelante: **los diccionarios**.
+
+---
+
+## 🗺️ Conexión con QGIS
+
+Cuando un técnico selecciona todas las tuberías de un sector hidráulico en QGIS, el software trabaja internamente con una colección de entidades.
+
+Más adelante recorreremos esas entidades mediante Python para:
+
+- calcular longitudes;
+- validar atributos;
+- generar reportes;
+- actualizar información automáticamente.
+
+Las operaciones básicas aprendidas con listas serán reutilizadas constantemente en PyQGIS.
+
+---
+
+## Buenas prácticas
+
+- Utiliza `append()` cuando incorpores un único registro.
+- Utiliza `extend()` cuando agregues varios registros simultáneamente.
+- Evita modificar una lista mientras la recorres, salvo que comprendas perfectamente sus implicaciones.
+- Mantén nombres descriptivos y relacionados con el dominio de la Ingeniería del Agua.
+
+---
+
+## Lo que acabas de aprender como Ingeniero del Agua
+
+Una lista no solo almacena información: también permite administrarla.
+
+Agregar, eliminar, recorrer y contabilizar elementos son tareas cotidianas en la gestión de redes de agua potable. Estas operaciones constituyen la base para automatizar inventarios, catastros técnicos y procesos de análisis que posteriormente realizaremos con Python y PyQGIS.
 - Conserva las unidades cuando aporten claridad.
 - Modela primero el problema y luego elige la colección adecuada.
+
+# 5.6 Modelando Información Técnica mediante Listas
+
+Hasta ahora hemos utilizado listas para almacenar valores individuales, como diámetros o presiones. Sin embargo, en un proyecto real rara vez trabajaremos con una única variable. Lo habitual es administrar información técnica perteneciente a diferentes componentes de un sistema de abastecimiento de agua potable.
+
+La clave consiste en identificar **qué información pertenece al mismo contexto** y organizarla en colecciones independientes.
+
+---
+
+## 💧 Ingeniería del Agua en Acción
+
+Durante una inspección técnica se recopila la siguiente información de una ampliación de red.
+
+| Código | Material | Diámetro (mm) | Longitud (m) |
+|:------:|:--------:|--------------:|-------------:|
+| T-001 | PVC | 110 | 125.4 |
+| T-002 | PVC | 90 | 84.7 |
+| T-003 | PEAD | 63 | 42.8 |
+| T-004 | Hierro Dúctil | 160 | 218.3 |
+
+Como todavía no conocemos los diccionarios, una forma sencilla de organizar estos datos consiste en utilizar varias listas relacionadas.
+
+```python
+codigos = ["T-001", "T-002", "T-003", "T-004"]
+
+materiales = ["PVC", "PVC", "PEAD", "Hierro Dúctil"]
+
+diametros_mm = [110, 90, 63, 160]
+
+longitudes_m = [125.4, 84.7, 42.8, 218.3]
+```
+
+Cada lista representa una característica del mismo conjunto de tuberías.
+
+---
+
+## Pensando como Ingeniero
+
+Antes de escribir código conviene preguntarse:
+
+- ¿Qué estoy inventariando?
+- ¿Qué atributos necesito registrar?
+- ¿Cómo se relacionan entre sí?
+
+Este análisis previo evita estructuras confusas y facilita el mantenimiento del programa.
+
+---
+
+## Series de Calidad del Agua
+
+El mismo principio puede aplicarse a resultados de laboratorio.
+
+```python
+ph = [7.18, 7.26, 7.14, 7.21]
+
+cloro_residual = [0.62, 0.58, 0.67, 0.64]
+
+turbidez = [0.38, 0.41, 0.36, 0.40]
+```
+
+Estas listas representan una campaña de muestreo realizada en distintos puntos de la red.
+
+---
+
+## Inventario de Pozos
+
+```python
+pozos = [
+    "PZ-001",
+    "PZ-002",
+    "PZ-003",
+    "PZ-004"
+]
+
+caudal_bombeo_ls = [
+    18.5,
+    22.0,
+    15.8,
+    19.4
+]
+```
+
+Aunque esta solución resulta útil, pronto aparecerá una pregunta importante:
+
+> ¿Cómo asociar toda la información de un mismo pozo en una única estructura?
+
+Responderemos esa pregunta cuando estudiemos los **diccionarios**.
+
+---
+
+## 🗺️ Conexión con QGIS
+
+Una tabla de atributos de QGIS contiene columnas con información similar:
+
+- Código.
+- Material.
+- Diámetro.
+- Longitud.
+- Estado.
+- Fecha de instalación.
+
+Cada columna puede entenderse como una colección de valores relacionados. Más adelante aprenderemos a leer y modificar estos atributos utilizando PyQGIS.
+
+---
+
+## ⚠️ Error frecuente
+
+No mezcles información de distinta naturaleza dentro de una misma lista.
+
+Evita:
+
+```python
+datos = [
+    "T-001",
+    110,
+    "PVC",
+    125.4,
+    True
+]
+```
+
+Aunque Python lo permite, esta estructura pierde significado rápidamente cuando el proyecto crece.
+
+Es preferible organizar la información de forma lógica y prepararse para utilizar estructuras más expresivas, como los diccionarios.
+
+---
+
+## Lo que acabas de aprender como Ingeniero del Agua
+
+Una lista puede representar mucho más que números.
+
+Puede almacenar códigos de activos, resultados de laboratorio, diámetros, materiales o cualquier otro conjunto de información relacionado.
+
+A medida que aumente la complejidad de los datos, necesitaremos estructuras capaces de mantener unidas todas las características de un mismo elemento. Ese será el siguiente paso en nuestro proceso de modelado de información.
+

@@ -1,21 +1,18 @@
 ---
-title: "Capítulo 5. Colecciones de Datos: Modelando la Información de la Ingeniería del Agua"
+title: "Capítulo 5. Colecciones de Datos: Modelando la Información de Sistemas de Agua Potable con Python"
 chapter: 5
 book: "Python para Ingenieros del Agua con QGIS"
-author_role: "Primera Parte"
 ---
 
 # Capítulo 5
-# Colecciones de Datos: Modelando la Información de la Ingeniería del Agua
+# Colecciones de Datos: Modelando la Información de Sistemas de Agua Potable con Python
 
-> *"Los datos aislados describen una observación; las colecciones describen un sistema."*
+> **Cada línea de código debe ayudar a comprender, analizar o mejorar un sistema de agua.**
 
----
-
-## Ruta del Conocimiento
+## Ruta del conocimiento
 
 ```text
-Tipos Fundamentales
+Tipos de datos fundamentales
         │
         ▼
 Dato individual
@@ -27,614 +24,89 @@ Colecciones
 Modelado de información
         │
         ▼
-Análisis
-        │
-        ▼
 PyQGIS
 ```
 
-**Tiempo estimado:** 2 horas
-
----
+**Tiempo estimado:** 2 horas 30 minutos
 
 # Bitácora del Ingeniero
 
-Hasta este momento hemos aprendido a representar un dato individual: un caudal, una precipitación, una coordenada UTM o el nombre de una estación hidrométrica.
+En los capítulos anteriores aprendimos a representar información individual mediante variables y tipos de datos fundamentales. Sin embargo, una Empresa Prestadora de Servicios de Agua Potable administra miles de elementos: tuberías, válvulas, hidrantes, pozos, reservorios, estaciones de bombeo, medidores y resultados de laboratorio.
 
-Sin embargo, la Ingeniería del Agua casi nunca trabaja con un único dato.
+La pregunta deja de ser:
 
-Cuando un ingeniero analiza una cuenca hidrográfica, procesa cientos o miles de observaciones provenientes de estaciones meteorológicas e hidrométricas. Cuando desarrolla un proyecto en QGIS, una capa vectorial puede contener miles de entidades con numerosos atributos. Del mismo modo, un modelo digital de elevación está compuesto por millones de celdas.
+> **¿Cómo almaceno un dato?**
 
-La pregunta deja de ser **"¿Cómo almaceno un dato?"** y pasa a ser:
+y pasa a ser:
 
-> **¿Cómo organizo grandes cantidades de información de forma eficiente y comprensible?**
+> **¿Cómo represento un sistema completo de información utilizando Python?**
 
-Python responde a esa necesidad mediante las **colecciones**.
-
----
+La respuesta comienza con las **colecciones**.
 
 # Objetivos
 
-Al finalizar esta primera parte podrás:
+- Comprender por qué una variable deja de ser suficiente.
+- Representar información técnica mediante colecciones.
+- Preparar estructuras de datos para futuros desarrollos con PyQGIS.
 
-- Comprender por qué existen las colecciones.
-- Diferenciar un dato individual de un conjunto de datos.
-- Identificar problemas reales donde una colección resulta indispensable.
-- Comprender la relación entre las colecciones de Python y la organización de datos utilizada posteriormente por PyQGIS.
+# 5.1 Cuando una variable deja de ser suficiente
 
----
-
-# 5.1 ¿Por qué existen las colecciones?
-
-Imaginemos que debemos registrar el caudal medio diario de una estación hidrométrica durante una semana.
-
-Una primera aproximación podría ser:
+Supongamos que el área de operación registra diariamente la presión en distintos puntos de la red.
 
 ```python
-caudal_lunes = 2.31
-caudal_martes = 2.48
-caudal_miercoles = 2.27
-caudal_jueves = 2.52
-caudal_viernes = 2.43
-caudal_sabado = 2.39
-caudal_domingo = 2.45
+presion_p1 = 28.4
+presion_p2 = 31.2
+presion_p3 = 29.7
+presion_p4 = 30.5
+presion_p5 = 27.9
 ```
 
-Aunque funciona, rápidamente aparecen problemas:
-
-- demasiadas variables;
-- difícil recorrer los datos;
-- difícil calcular estadísticas;
-- difícil reutilizar el código.
-
-La dificultad no está en Python.
-
-Está en que **estamos utilizando variables para resolver un problema que requiere una colección**.
-
----
-
-# 💧 Ingeniería del Agua en Acción
-
-Una campaña de monitoreo registra diariamente:
-
-- Caudal
-- pH
-- Conductividad eléctrica
-- Temperatura
-- Turbidez
-
-en **45 estaciones** durante **365 días**.
-
-Eso representa:
-
-```text
-45 estaciones
-
-×
-
-365 días
-
-×
-
-5 variables
-
-=
-
-82 125 observaciones
-```
-
-Nadie escribiría 82 125 variables.
-
-Necesitamos una estructura que permita agrupar información relacionada.
-
-Ahí nacen las colecciones.
-
----
-
-# 5.2 Del dato al conjunto de datos
-
-Observemos la evolución del problema.
-
-## Un dato
-
-```python
-caudal = 2.35
-```
-
-Representa una única observación.
-
----
-
-## Varios datos relacionados
-
-```python
-caudales = [
-    2.35,
-    2.48,
-    2.51,
-    2.44,
-    2.39
-]
-```
-
-Ahora la información posee contexto.
-
-Ya no hablamos de un valor aislado, sino de una serie de mediciones.
-
----
-
-# ¿Qué estamos modelando realmente?
-
-No estamos aprendiendo una lista.
-
-Estamos modelando un fenómeno hidrológico.
-
-```text
-Río
- │
- ├── Medición 1
- ├── Medición 2
- ├── Medición 3
- ├── Medición 4
- └── Medición 5
-
-        │
-
-        ▼
-
-Lista de Python
-```
-
----
-
-# Pensando como Ingeniero
-
-Un ingeniero rara vez pregunta:
-
-> "¿Qué colección debo utilizar?"
-
-Primero pregunta:
-
-> "¿Cómo está organizada mi información?"
-
-Después selecciona la estructura adecuada.
-
-Ese cambio de perspectiva será una constante durante todo el libro.
-
----
-
-# 🗺️ Conexión con QGIS
-
-En QGIS una capa vectorial contiene muchas entidades.
-
-Cada entidad posee atributos.
-
-Más adelante descubriremos que muchas operaciones de PyQGIS consisten en recorrer colecciones de entidades.
-
-Por ello, comprender las colecciones de Python es un requisito indispensable antes de comenzar a programar con PyQGIS.
-
----
-
-# Proyecto AQUA-SIG
-
-Durante todo el libro construiremos una aplicación que apoye la gestión de información hidrológica.
-
-En este capítulo comenzaremos definiendo la información que deberá almacenar.
-
-```text
-AQUA-SIG
-
-├── Estaciones
-├── Cuencas
-├── Ríos
-├── Campañas
-├── Mediciones
-└── Resultados
-```
-
-Cada elemento será representado mediante las colecciones que aprenderemos en este capítulo.
-
----
-
-# Buenas prácticas
-
-- Utiliza nombres que representen conceptos de Ingeniería del Agua.
-- Evita ejemplos genéricos como `x`, `dato` o `lista1`.
-- Piensa primero en el problema y luego en la estructura de datos.
-
----
-
-# Error frecuente
-
-Muchos principiantes crean una variable por cada medición.
-
-Ese enfoque funciona con pocos datos, pero se vuelve inmanejable en proyectos reales.
-
-Las colecciones existen precisamente para resolver ese problema.
-
----
-
-# Lo que acabas de aprender como Ingeniero del Agua
-
-Hoy no aprendiste únicamente un nuevo concepto de Python.
-
-Aprendiste que la programación comienza cuando dejamos de pensar en datos aislados y empezamos a representar sistemas completos.
-
-Una red hidrométrica, una campaña de monitoreo o una tabla de atributos de QGIS son, en esencia, **colecciones de información**.
-
-En la siguiente parte comenzaremos a estudiar la primera y más utilizada de todas ellas: **las listas**.
-
-# 5.3 La primera gran colección: las listas (`list`)
-
-> **Idea clave:** Una lista permite almacenar una secuencia ordenada de elementos. En Ingeniería del Agua es la estructura natural para representar observaciones, estaciones, campañas de monitoreo o resultados de simulaciones.
-
----
+Este enfoque funciona para pocos datos, pero rápidamente se vuelve difícil de mantener.
 
 ## 💧 Ingeniería del Agua en Acción
 
-Supongamos que durante una campaña de aforo se obtuvieron los siguientes caudales (m³/s):
+Durante una actualización del catastro técnico se registran:
 
-| Hora | Caudal |
-|------:|-------:|
-|08:00|2.31|
-|10:00|2.45|
-|12:00|2.58|
-|14:00|2.49|
-|16:00|2.37|
+| Activo | Cantidad |
+|--------|---------:|
+| Tuberías | 4862 |
+| Válvulas | 713 |
+| Hidrantes | 158 |
+| Pozos | 24 |
+| Reservorios | 8 |
 
-En Python podemos representarlos como una lista.
+Intentar representar esta información mediante variables individuales sería inviable.
 
-```python
-caudales = [2.31, 2.45, 2.58, 2.49, 2.37]
-```
+Necesitamos estructuras capaces de almacenar conjuntos de datos relacionados.
 
-No estamos almacenando cinco variables independientes.
+# 5.2 Del dato al sistema
 
-Estamos representando una **serie de observaciones**.
-
----
-
-# ¿Por qué una lista?
-
-Porque conserva:
-
-- el orden;
-- todos los elementos;
-- la posibilidad de recorrerlos;
-- la posibilidad de modificarlos.
-
-```text
-Índice
-
- 0      1      2      3      4
-
-┌────┬────┬────┬────┬────┐
-│2.31│2.45│2.58│2.49│2.37│
-└────┴────┴────┴────┴────┘
-```
-
-Los índices comienzan en **0**, una característica fundamental de Python.
-
----
-
-# Creando listas
-
-Lista de estaciones hidrométricas:
+Una variable representa un dato.
 
 ```python
-estaciones = [
-    "ROC001",
-    "ROC002",
-    "ROC003",
-    "ROC004"
+diametro_mm = 110
+```
+
+Una colección representa un conjunto de datos.
+
+```python
+diametros_mm = [
+    63,
+    90,
+    110,
+    160,
+    200
 ]
 ```
 
-Lista de precipitaciones diarias:
+## 🗺️ Conexión con QGIS
 
-```python
-precipitaciones = [
-    12.5,
-    0.0,
-    5.8,
-    18.2,
-    7.4
-]
-```
+Una capa vectorial contiene miles de entidades con atributos como diámetro, material, longitud y presión.
 
-Lista de nombres de cuencas:
+Las colecciones que aprenderemos en este capítulo serán la base para manipular esas entidades mediante PyQGIS.
 
-```python
-cuencas = [
-    "Río Rocha",
-    "Katari",
-    "Desaguadero",
-    "Pilcomayo"
-]
-```
+# Buenas prácticas
 
----
-
-# Accediendo a los elementos
-
-```python
-caudales = [2.31, 2.45, 2.58, 2.49]
-
-print(caudales[0])
-print(caudales[2])
-```
-
-Resultado
-
-```text
-2.31
-2.58
-```
-
----
-
-# 🗺️ Conexión con QGIS
-
-Cuando más adelante obtengamos todas las entidades de una capa vectorial, conceptualmente estaremos trabajando con una colección ordenada.
-
-Comprender cómo acceder a un elemento mediante su posición facilitará posteriormente el trabajo con entidades y atributos en PyQGIS.
-
----
-
-# Longitud de una lista
-
-Durante un monitoreo es común preguntar:
-
-> ¿Cuántas observaciones tenemos?
-
-```python
-numero_observaciones = len(caudales)
-
-print(numero_observaciones)
-```
-
-Resultado
-
-```text
-4
-```
-
----
-
-# Agregando nuevos registros
-
-Cada nueva medición puede incorporarse utilizando `append()`.
-
-```python
-caudales = [2.31, 2.45, 2.58]
-
-caudales.append(2.62)
-```
-
-Ahora la lista contiene cuatro mediciones.
-
----
-
-# Recorriendo una lista
-
-El verdadero potencial aparece cuando recorremos automáticamente todas las observaciones.
-
-```python
-caudales = [2.31, 2.45, 2.58, 2.49]
-
-for caudal in caudales:
-    print(caudal)
-```
-
-Esta idea será utilizada constantemente para procesar:
-
-- estaciones;
-- capas SIG;
-- registros meteorológicos;
-- resultados hidráulicos.
-
----
-
-# 💡 Consejo del Ingeniero
-
-Antes de escribir muchas variables con el mismo significado, pregúntate:
-
-> ¿Estoy describiendo un solo dato o una colección de datos?
-
-Si la respuesta es una colección, probablemente necesites una lista.
-
----
-
-# 🚀 Proyecto AQUA-SIG
-
-La primera versión del sistema almacenará las estaciones disponibles.
-
-```python
-estaciones = [
-    "ROC001",
-    "ROC002",
-    "ROC003",
-    "ROC004",
-    "ROC005"
-]
-```
-
-Más adelante cada estación incorporará atributos, geometría y resultados de monitoreo.
-
----
-
-# 5.4 Operaciones Fundamentales con Listas
-
-> **Las listas son el punto de partida para modelar información de Ingeniería del Agua.**
-> Antes de utilizarlas con PyQGIS, debemos aprender a manipularlas de manera eficiente.
-
----
-
-# 💧 Ingeniería del Agua en Acción
-
-Una brigada técnica realiza una campaña de aforos en cinco estaciones.
-
-| Código | Río | Caudal (m³/s) |
-|--------|-----|---------------:|
-|ROC001|Rocha|2.31|
-|ROC002|Rocha|2.45|
-|ROC003|Rocha|2.58|
-|ROC004|Rocha|2.49|
-|ROC005|Rocha|2.37|
-
-En esta primera etapa solamente almacenaremos los caudales.
-
-```python
-caudales = [2.31, 2.45, 2.58, 2.49, 2.37]
-```
-
----
-
-# Agregar nuevas observaciones
-
-```python
-caudales.append(2.61)
-
-print(caudales)
-```
-
-Resultado
-
-```text
-[2.31, 2.45, 2.58, 2.49, 2.37, 2.61]
-```
-
-Cada llamada a `append()` representa una nueva medición incorporada a la campaña.
-
----
-
-# Insertar una observación
-
-Si una medición olvidada debe colocarse en una posición específica:
-
-```python
-caudales.insert(2, 2.52)
-```
-
-```text
-Índice
-
-0   1   2   3   4   5
-
-2.31 2.45 2.52 2.58 2.49 2.37
-```
-
----
-
-# Eliminar registros
-
-Supongamos que una medición fue descartada por error instrumental.
-
-```python
-caudales.remove(2.52)
-```
-
-O eliminar por posición:
-
-```python
-caudales.pop(0)
-```
-
-En este caso se elimina la primera observación.
-
----
-
-# Recorrer una campaña completa
-
-```python
-for numero, caudal in enumerate(caudales, start=1):
-    print(f"Medición {numero}: {caudal:.2f} m³/s")
-```
-
-Salida:
-
-```text
-Medición 1: 2.31 m³/s
-Medición 2: 2.45 m³/s
-...
-```
-
----
-
-# Diagramando una lista
-
-```text
-Campaña de aforos
-
-┌──────────────────────────────────────────┐
-│2.31│2.45│2.58│2.49│2.37│2.61│
-└──────────────────────────────────────────┘
-
-        Python list
-```
-
----
-
-# 💡 Buena práctica
-
-Utiliza listas cuando:
-
-- el orden sea importante;
-- el número de elementos cambie durante el programa;
-- necesites recorrer todos los registros.
-
----
-
-# ⚠️ Error frecuente
-
-Evita construir estructuras como:
-
-```python
-caudal1 = 2.31
-caudal2 = 2.45
-caudal3 = 2.58
-```
-
-Cuando los datos representan una misma variable física, deben formar parte de una colección.
-
----
-
-# 🗺️ Conexión con QGIS
-
-Una capa vectorial puede contener miles de entidades.
-
-Conceptualmente podrás recorrerlas de una forma muy similar:
-
-```python
-for entidad in capa:
-    ...
-```
-
-El patrón mental es el mismo que acabas de aprender con una lista.
-
----
-
-# 🚀 Proyecto AQUA-SIG
-
-Primera estructura del módulo de monitoreo:
-
-```python
-campania = {
-    "rio": "Rocha",
-    "fecha": "2026-08-15",
-    "caudales": [2.31, 2.45, 2.58, 2.49, 2.37]
-}
-```
-
-Todavía no hemos estudiado diccionarios en profundidad, pero esta vista previa muestra cómo las listas comenzarán a integrarse con otras colecciones para modelar información cada vez más rica.
-
----
-
-# Lo que acabas de aprender como Ingeniero del Agua
-
-Una lista no representa únicamente valores.
-
-Representa una secuencia de observaciones de un mismo fenómeno.
-
-En los próximos apartados ampliaremos este modelo incorporando otras colecciones, permitiendo describir estaciones, campañas, atributos y posteriormente entidades geográficas de QGIS de una manera natural.preparar datos para PyQGIS.
-
+- Utiliza nombres relacionados con Ingeniería del Agua.
+- Conserva las unidades cuando aporten claridad.
+- Modela primero el problema y luego elige la colección adecuada.

@@ -463,17 +463,178 @@ Más adelante cada estación incorporará atributos, geometría y resultados de 
 
 ---
 
-# Resumen de esta segunda parte
+# 5.4 Operaciones Fundamentales con Listas
 
-En esta sección aprendimos que una lista es mucho más que una estructura de Python.
+> **Las listas son el punto de partida para modelar información de Ingeniería del Agua.**
+> Antes de utilizarlas con PyQGIS, debemos aprender a manipularlas de manera eficiente.
 
-Es la forma natural de representar información secuencial en Ingeniería del Agua:
+---
 
-- campañas de monitoreo;
-- series de caudales;
-- precipitaciones;
-- estaciones;
-- resultados de modelos.
+# 💧 Ingeniería del Agua en Acción
 
-En la siguiente parte ampliaremos las operaciones sobre listas y conoceremos nuevas colecciones como tuplas y diccionarios, fundamentales para modelar atributos y preparar datos para PyQGIS.
+Una brigada técnica realiza una campaña de aforos en cinco estaciones.
+
+| Código | Río | Caudal (m³/s) |
+|--------|-----|---------------:|
+|ROC001|Rocha|2.31|
+|ROC002|Rocha|2.45|
+|ROC003|Rocha|2.58|
+|ROC004|Rocha|2.49|
+|ROC005|Rocha|2.37|
+
+En esta primera etapa solamente almacenaremos los caudales.
+
+```python
+caudales = [2.31, 2.45, 2.58, 2.49, 2.37]
+```
+
+---
+
+# Agregar nuevas observaciones
+
+```python
+caudales.append(2.61)
+
+print(caudales)
+```
+
+Resultado
+
+```text
+[2.31, 2.45, 2.58, 2.49, 2.37, 2.61]
+```
+
+Cada llamada a `append()` representa una nueva medición incorporada a la campaña.
+
+---
+
+# Insertar una observación
+
+Si una medición olvidada debe colocarse en una posición específica:
+
+```python
+caudales.insert(2, 2.52)
+```
+
+```text
+Índice
+
+0   1   2   3   4   5
+
+2.31 2.45 2.52 2.58 2.49 2.37
+```
+
+---
+
+# Eliminar registros
+
+Supongamos que una medición fue descartada por error instrumental.
+
+```python
+caudales.remove(2.52)
+```
+
+O eliminar por posición:
+
+```python
+caudales.pop(0)
+```
+
+En este caso se elimina la primera observación.
+
+---
+
+# Recorrer una campaña completa
+
+```python
+for numero, caudal in enumerate(caudales, start=1):
+    print(f"Medición {numero}: {caudal:.2f} m³/s")
+```
+
+Salida:
+
+```text
+Medición 1: 2.31 m³/s
+Medición 2: 2.45 m³/s
+...
+```
+
+---
+
+# Diagramando una lista
+
+```text
+Campaña de aforos
+
+┌──────────────────────────────────────────┐
+│2.31│2.45│2.58│2.49│2.37│2.61│
+└──────────────────────────────────────────┘
+
+        Python list
+```
+
+---
+
+# 💡 Buena práctica
+
+Utiliza listas cuando:
+
+- el orden sea importante;
+- el número de elementos cambie durante el programa;
+- necesites recorrer todos los registros.
+
+---
+
+# ⚠️ Error frecuente
+
+Evita construir estructuras como:
+
+```python
+caudal1 = 2.31
+caudal2 = 2.45
+caudal3 = 2.58
+```
+
+Cuando los datos representan una misma variable física, deben formar parte de una colección.
+
+---
+
+# 🗺️ Conexión con QGIS
+
+Una capa vectorial puede contener miles de entidades.
+
+Conceptualmente podrás recorrerlas de una forma muy similar:
+
+```python
+for entidad in capa:
+    ...
+```
+
+El patrón mental es el mismo que acabas de aprender con una lista.
+
+---
+
+# 🚀 Proyecto AQUA-SIG
+
+Primera estructura del módulo de monitoreo:
+
+```python
+campania = {
+    "rio": "Rocha",
+    "fecha": "2026-08-15",
+    "caudales": [2.31, 2.45, 2.58, 2.49, 2.37]
+}
+```
+
+Todavía no hemos estudiado diccionarios en profundidad, pero esta vista previa muestra cómo las listas comenzarán a integrarse con otras colecciones para modelar información cada vez más rica.
+
+---
+
+# Lo que acabas de aprender como Ingeniero del Agua
+
+Una lista no representa únicamente valores.
+
+Representa una secuencia de observaciones de un mismo fenómeno.
+
+En los próximos apartados ampliaremos este modelo incorporando otras colecciones, permitiendo describir estaciones, campañas, atributos y posteriormente entidades geográficas de QGIS de una manera natural.preparar datos para PyQGIS.
 

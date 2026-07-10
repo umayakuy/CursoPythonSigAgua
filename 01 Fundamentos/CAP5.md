@@ -852,3 +852,177 @@ Durante los próximos capítulos aprenderemos a construir estructuras de Python 
 Las listas son excelentes para representar secuencias de datos, pero no siempre son la mejor opción para describir activos complejos.
 
 Comprender sus límites es tan importante como conocer sus ventajas. En la siguiente sección incorporaremos una nueva colección que permitirá modelar tuberías, pozos, reservorios y muestras de calidad del agua de una forma mucho más natural y cercana a la realidad.
+
+# 5.8 Modelando Activos mediante Diccionarios
+
+En la sección anterior descubrimos que una lista resulta insuficiente cuando un elemento posee múltiples atributos. Este escenario es muy frecuente en Ingeniería del Agua.
+
+Una tubería no está definida únicamente por su diámetro. Un pozo no se caracteriza solo por su caudal de bombeo. Una muestra de calidad del agua no está representada únicamente por el valor de pH.
+
+Cada elemento posee un conjunto de propiedades que deben mantenerse unidas.
+
+Python resuelve este problema mediante los **diccionarios (`dict`)**.
+
+---
+
+## 💧 Ingeniería del Agua en Acción
+
+Durante la actualización del catastro técnico se registra una nueva tubería de la red de distribución.
+
+La información disponible es la siguiente:
+
+| Atributo | Valor |
+|-----------|----------------|
+| Código | T-015 |
+| Material | PVC |
+| Diámetro | 110 mm |
+| Longitud | 235.40 m |
+| Estado | Operativa |
+| Presión | 31.8 m.c.a. |
+
+Toda esta información pertenece a un único activo.
+
+Representarla mediante un diccionario resulta mucho más natural.
+
+```python
+tuberia = {
+    "codigo": "T-015",
+    "material": "PVC",
+    "diametro_mm": 110,
+    "longitud_m": 235.40,
+    "estado": "Operativa",
+    "presion_mca": 31.8
+}
+```
+
+---
+
+## ¿Qué representa un diccionario?
+
+Un diccionario almacena información mediante pares **clave : valor**.
+
+```text
+┌──────────────────────────────────────┐
+│ codigo         → T-015               │
+│ material       → PVC                 │
+│ diametro_mm    → 110                 │
+│ longitud_m     → 235.40              │
+│ estado         → Operativa           │
+│ presion_mca    → 31.8                │
+└──────────────────────────────────────┘
+```
+
+Las claves identifican cada atributo.
+
+Los valores contienen la información correspondiente.
+
+---
+
+## Accediendo a un atributo
+
+```python
+print(tuberia["diametro_mm"])
+print(tuberia["material"])
+```
+
+Resultado
+
+```text
+110
+PVC
+```
+
+En lugar de recordar posiciones como ocurre en una lista, utilizamos el nombre del atributo.
+
+Esto hace que el código sea mucho más legible.
+
+---
+
+## Modificando información
+
+Durante una inspección se reemplaza la tubería por una de mayor diámetro.
+
+```python
+tuberia["diametro_mm"] = 160
+```
+
+También es posible actualizar el estado operativo.
+
+```python
+tuberia["estado"] = "Fuera de servicio"
+```
+
+---
+
+## Agregando nuevos atributos
+
+A medida que evoluciona el proyecto pueden incorporarse nuevos datos.
+
+```python
+tuberia["anio_instalacion"] = 2025
+```
+
+Los diccionarios permiten ampliar la información sin modificar toda la estructura.
+
+---
+
+## 💧 Calidad del Agua
+
+Los diccionarios también resultan ideales para representar una muestra de laboratorio.
+
+```python
+muestra = {
+    "codigo": "M-024",
+    "ph": 7.18,
+    "cloro_residual_mg_l": 0.68,
+    "turbidez_ntu": 0.41,
+    "conductividad_us_cm": 435
+}
+```
+
+Todos los resultados permanecen asociados a una misma muestra.
+
+---
+
+## 💧 Pozos
+
+```python
+pozo = {
+    "codigo": "PZ-003",
+    "profundidad_m": 128.5,
+    "nivel_estatico_m": 21.4,
+    "nivel_dinamico_m": 35.8,
+    "caudal_ls": 19.6
+}
+```
+
+Cada pozo representa un único activo con múltiples características técnicas.
+
+---
+
+## 🗺️ Conexión con QGIS
+
+Observa la similitud entre un diccionario y una fila de la tabla de atributos de QGIS.
+
+Cada campo de la tabla corresponde a una clave del diccionario.
+
+Esta analogía facilitará enormemente el aprendizaje de PyQGIS, donde trabajaremos continuamente con atributos de entidades geográficas.
+
+---
+
+## Buenas prácticas
+
+- Utiliza claves descriptivas.
+- Mantén una nomenclatura consistente.
+- Incluye unidades cuando aporten claridad (`diametro_mm`, `presion_mca`).
+- Evita abreviaturas ambiguas.
+
+---
+
+## Lo que acabas de aprender como Ingeniero del Agua
+
+Un diccionario permite representar un activo completo y no únicamente una colección de valores.
+
+A partir de este momento ya es posible modelar tuberías, pozos, reservorios o muestras de calidad del agua de una manera muy similar a como aparecen en un sistema SIG o en una base de datos técnica.
+
+En la siguiente sección veremos cómo combinar listas y diccionarios para representar redes completas de distribución de agua potable.

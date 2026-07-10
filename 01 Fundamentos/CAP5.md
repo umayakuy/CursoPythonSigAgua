@@ -263,3 +263,217 @@ Aprendiste que la programación comienza cuando dejamos de pensar en datos aisla
 Una red hidrométrica, una campaña de monitoreo o una tabla de atributos de QGIS son, en esencia, **colecciones de información**.
 
 En la siguiente parte comenzaremos a estudiar la primera y más utilizada de todas ellas: **las listas**.
+
+# 5.3 La primera gran colección: las listas (`list`)
+
+> **Idea clave:** Una lista permite almacenar una secuencia ordenada de elementos. En Ingeniería del Agua es la estructura natural para representar observaciones, estaciones, campañas de monitoreo o resultados de simulaciones.
+
+---
+
+## 💧 Ingeniería del Agua en Acción
+
+Supongamos que durante una campaña de aforo se obtuvieron los siguientes caudales (m³/s):
+
+| Hora | Caudal |
+|------:|-------:|
+|08:00|2.31|
+|10:00|2.45|
+|12:00|2.58|
+|14:00|2.49|
+|16:00|2.37|
+
+En Python podemos representarlos como una lista.
+
+```python
+caudales = [2.31, 2.45, 2.58, 2.49, 2.37]
+```
+
+No estamos almacenando cinco variables independientes.
+
+Estamos representando una **serie de observaciones**.
+
+---
+
+# ¿Por qué una lista?
+
+Porque conserva:
+
+- el orden;
+- todos los elementos;
+- la posibilidad de recorrerlos;
+- la posibilidad de modificarlos.
+
+```text
+Índice
+
+ 0      1      2      3      4
+
+┌────┬────┬────┬────┬────┐
+│2.31│2.45│2.58│2.49│2.37│
+└────┴────┴────┴────┴────┘
+```
+
+Los índices comienzan en **0**, una característica fundamental de Python.
+
+---
+
+# Creando listas
+
+Lista de estaciones hidrométricas:
+
+```python
+estaciones = [
+    "ROC001",
+    "ROC002",
+    "ROC003",
+    "ROC004"
+]
+```
+
+Lista de precipitaciones diarias:
+
+```python
+precipitaciones = [
+    12.5,
+    0.0,
+    5.8,
+    18.2,
+    7.4
+]
+```
+
+Lista de nombres de cuencas:
+
+```python
+cuencas = [
+    "Río Rocha",
+    "Katari",
+    "Desaguadero",
+    "Pilcomayo"
+]
+```
+
+---
+
+# Accediendo a los elementos
+
+```python
+caudales = [2.31, 2.45, 2.58, 2.49]
+
+print(caudales[0])
+print(caudales[2])
+```
+
+Resultado
+
+```text
+2.31
+2.58
+```
+
+---
+
+# 🗺️ Conexión con QGIS
+
+Cuando más adelante obtengamos todas las entidades de una capa vectorial, conceptualmente estaremos trabajando con una colección ordenada.
+
+Comprender cómo acceder a un elemento mediante su posición facilitará posteriormente el trabajo con entidades y atributos en PyQGIS.
+
+---
+
+# Longitud de una lista
+
+Durante un monitoreo es común preguntar:
+
+> ¿Cuántas observaciones tenemos?
+
+```python
+numero_observaciones = len(caudales)
+
+print(numero_observaciones)
+```
+
+Resultado
+
+```text
+4
+```
+
+---
+
+# Agregando nuevos registros
+
+Cada nueva medición puede incorporarse utilizando `append()`.
+
+```python
+caudales = [2.31, 2.45, 2.58]
+
+caudales.append(2.62)
+```
+
+Ahora la lista contiene cuatro mediciones.
+
+---
+
+# Recorriendo una lista
+
+El verdadero potencial aparece cuando recorremos automáticamente todas las observaciones.
+
+```python
+caudales = [2.31, 2.45, 2.58, 2.49]
+
+for caudal in caudales:
+    print(caudal)
+```
+
+Esta idea será utilizada constantemente para procesar:
+
+- estaciones;
+- capas SIG;
+- registros meteorológicos;
+- resultados hidráulicos.
+
+---
+
+# 💡 Consejo del Ingeniero
+
+Antes de escribir muchas variables con el mismo significado, pregúntate:
+
+> ¿Estoy describiendo un solo dato o una colección de datos?
+
+Si la respuesta es una colección, probablemente necesites una lista.
+
+---
+
+# 🚀 Proyecto AQUA-SIG
+
+La primera versión del sistema almacenará las estaciones disponibles.
+
+```python
+estaciones = [
+    "ROC001",
+    "ROC002",
+    "ROC003",
+    "ROC004",
+    "ROC005"
+]
+```
+
+Más adelante cada estación incorporará atributos, geometría y resultados de monitoreo.
+
+---
+
+# Resumen de esta segunda parte
+
+En esta sección aprendimos que una lista es mucho más que una estructura de Python.
+
+Es la forma natural de representar información secuencial en Ingeniería del Agua:
+
+- campañas de monitoreo;
+- series de caudales;
+- precipitaciones;
+- estaciones;
+- resultados de modelos.
+
+En la siguiente parte ampliaremos las operaciones sobre listas y conoceremos nuevas colecciones como tuplas y diccionarios, fundamentales para modelar atributos y preparar datos para PyQGIS.
+

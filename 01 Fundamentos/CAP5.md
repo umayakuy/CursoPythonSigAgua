@@ -735,3 +735,120 @@ Puede almacenar códigos de activos, resultados de laboratorio, diámetros, mate
 
 A medida que aumente la complejidad de los datos, necesitaremos estructuras capaces de mantener unidas todas las características de un mismo elemento. Ese será el siguiente paso en nuestro proceso de modelado de información.
 
+# 5.7 Cuando una Lista Ya No Es Suficiente
+
+En las secciones anteriores organizamos la información mediante varias listas independientes. Este enfoque es útil para comprender el funcionamiento de las colecciones, pero presenta una limitación importante: **la relación entre los datos depende de mantener el mismo orden en todas las listas**.
+
+Mientras el conjunto de información es pequeño, esta estrategia funciona. Sin embargo, conforme un proyecto crece, mantener listas paralelas se vuelve propenso a errores.
+
+---
+
+## 💧 Ingeniería del Agua en Acción
+
+Supongamos que el Área de Catastro Técnico administra la siguiente información.
+
+```python
+codigos = ["T-001", "T-002", "T-003"]
+
+diametros_mm = [110, 90, 160]
+
+materiales = ["PVC", "PVC", "Hierro Dúctil"]
+
+longitudes_m = [125.4, 84.7, 218.3]
+```
+
+Observa que el índice **0** representa siempre la misma tubería.
+
+```text
+Índice      0
+
+Código      T-001
+
+Diámetro    110 mm
+
+Material    PVC
+
+Longitud    125.4 m
+```
+
+Pero ¿qué ocurriría si alguien elimina accidentalmente un elemento de una sola lista?
+
+```python
+diametros_mm.pop(1)
+```
+
+Ahora las listas dejan de representar la misma información.
+
+```text
+Código      T-002
+
+Material    PVC
+
+Longitud    84.7
+
+Diámetro    ❌ Ya no coincide
+```
+
+La información pierde consistencia.
+
+---
+
+## Modelando correctamente un activo
+
+En la realidad, una tubería es un único activo con muchas propiedades.
+
+No tiene sentido separar artificialmente sus características.
+
+Necesitamos una estructura que permita mantener unidas todas ellas.
+
+Ese será precisamente el propósito de los **diccionarios**, que estudiaremos en la siguiente sección.
+
+---
+
+## 🏗️ Modelando un Activo de la Red
+
+Antes de elegir una estructura de datos conviene identificar los atributos que describen un elemento.
+
+Una tubería puede caracterizarse mediante:
+
+| Atributo | Unidad |
+|----------|---------|
+| Código | — |
+| Material | — |
+| Diámetro | mm |
+| Longitud | m |
+| Estado | — |
+| Año de instalación | año |
+| Presión de operación | m.c.a. |
+
+Todos estos atributos pertenecen al mismo objeto físico.
+
+Nuestro objetivo como programadores es representar esa realidad de la forma más natural posible.
+
+---
+
+## 🗺️ Conexión con QGIS
+
+Si observas la tabla de atributos de una capa de tuberías en QGIS encontrarás exactamente este mismo concepto.
+
+Cada fila representa una tubería.
+
+Cada columna representa uno de sus atributos.
+
+Durante los próximos capítulos aprenderemos a construir estructuras de Python que reflejen este modelo y posteriormente interactúen con las capas vectoriales mediante PyQGIS.
+
+---
+
+## Buenas prácticas
+
+- Evita depender de varias listas paralelas cuando la información describe un mismo elemento.
+- Piensa primero en el activo físico y después en la estructura de datos.
+- Mantén una correspondencia clara entre el modelo de ingeniería y el modelo computacional.
+
+---
+
+## Lo que acabas de aprender como Ingeniero del Agua
+
+Las listas son excelentes para representar secuencias de datos, pero no siempre son la mejor opción para describir activos complejos.
+
+Comprender sus límites es tan importante como conocer sus ventajas. En la siguiente sección incorporaremos una nueva colección que permitirá modelar tuberías, pozos, reservorios y muestras de calidad del agua de una forma mucho más natural y cercana a la realidad.
